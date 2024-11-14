@@ -1,9 +1,7 @@
 package dev.gustavorh.lms_dev_10.repositories.implementations;
 
-import dev.gustavorh.lms_dev_10.entities.Book;
 import dev.gustavorh.lms_dev_10.entities.Category;
-import dev.gustavorh.lms_dev_10.repositories.interfaces.ICategoryRepository;
-import dev.gustavorh.lms_dev_10.utils.BookMapper;
+import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.utils.CategoryMapper;
 
 import java.sql.Connection;
@@ -14,8 +12,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcCategoryRepository implements ICategoryRepository {
-    private Connection connection;
+public class JdbcCategoryRepository implements IRepository<Category> {
+    private final Connection connection;
     private final CategoryMapper categoryMapper;
 
     public JdbcCategoryRepository(Connection connection) {
@@ -28,21 +26,6 @@ public class JdbcCategoryRepository implements ICategoryRepository {
     private static final String UPDATE_BY_ID = "UPDATE Categorias SET nombre = ? WHERE id_categoria = ?";
     private static final String INSERT = "INSERT INTO Categorias (nombre) VALUES (?)";
     private static final String DELETE = "DELETE FROM Categorias WHERE id_categoria = ?";
-
-    @Override
-    public Category findByName(String name) throws SQLException {
-        String sql = FIND_ALL + " WHERE nombre = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, name);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return categoryMapper.mapRow(rs);
-                }
-                // TODO: Cast to optional in case ID is not found.
-                return null;
-            }
-        }
-    }
 
     @Override
     public Category findById(Long id) throws SQLException {

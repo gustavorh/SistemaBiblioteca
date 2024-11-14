@@ -8,9 +8,7 @@ import dev.gustavorh.lms_dev_10.factories.implementations.DefaultServiceFactory;
 import dev.gustavorh.lms_dev_10.factories.implementations.JdbcRepositoryFactory;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IRepositoryFactory;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IServiceFactory;
-import dev.gustavorh.lms_dev_10.services.interfaces.IAuthorService;
-import dev.gustavorh.lms_dev_10.services.interfaces.IBookService;
-import dev.gustavorh.lms_dev_10.services.interfaces.ICategoryService;
+import dev.gustavorh.lms_dev_10.services.interfaces.IService;
 import dev.gustavorh.lms_dev_10.utils.ServiceException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,9 +24,9 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = {"/books/add", "/books/edit"})
 public class BookFormServlet extends HttpServlet {
-    private IBookService bookService;
-    private IAuthorService authorService;
-    private ICategoryService categoryService;
+    private IService<Book> bookService;
+    private IService<Author> authorService;
+    private IService<Category> categoryService;
 
     @Override
     public void init() throws ServletException {

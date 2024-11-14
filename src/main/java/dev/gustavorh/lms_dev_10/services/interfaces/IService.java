@@ -1,6 +1,5 @@
 package dev.gustavorh.lms_dev_10.services.interfaces;
 
-import java.sql.SQLException;
 import java.util.List;
 
 // Generic Service interfaces

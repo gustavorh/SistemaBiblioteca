@@ -1,7 +1,5 @@
 package dev.gustavorh.lms_dev_10.entities;
 
-import java.time.LocalDateTime;
-
 public class Book {
     private Long bookId;
     private String title;
