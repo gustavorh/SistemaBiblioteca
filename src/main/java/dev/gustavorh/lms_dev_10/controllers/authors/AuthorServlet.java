@@ -1,11 +1,12 @@
 package dev.gustavorh.lms_dev_10.controllers.authors;
 
 import dev.gustavorh.lms_dev_10.config.DbContext;
+import dev.gustavorh.lms_dev_10.entities.Author;
 import dev.gustavorh.lms_dev_10.factories.implementations.DefaultServiceFactory;
 import dev.gustavorh.lms_dev_10.factories.implementations.JdbcRepositoryFactory;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IRepositoryFactory;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IServiceFactory;
-import dev.gustavorh.lms_dev_10.services.interfaces.IAuthorService;
+import dev.gustavorh.lms_dev_10.services.interfaces.IService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,9 +17,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@WebServlet("/authors/ver")
+@WebServlet("/authors/all")
 public class AuthorServlet extends HttpServlet {
-    private IAuthorService authorService;
+    private IService<Author> authorService;
 
     @Override
     public void init() throws ServletException {

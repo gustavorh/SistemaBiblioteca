@@ -1,27 +1,18 @@
 package dev.gustavorh.lms_dev_10.services.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.Author;
-import dev.gustavorh.lms_dev_10.repositories.interfaces.IAuthorRepository;
-import dev.gustavorh.lms_dev_10.services.interfaces.IAuthorService;
+import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
+import dev.gustavorh.lms_dev_10.services.interfaces.IService;
 import dev.gustavorh.lms_dev_10.utils.ServiceException;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class AuthorService implements IAuthorService {
-    private final IAuthorRepository authorRepository;
+public class AuthorService implements IService<Author> {
+    private final IRepository<Author> authorRepository;
 
-    public AuthorService(IAuthorRepository authorRepository) {
+    public AuthorService(IRepository<Author> authorRepository) {
         this.authorRepository = authorRepository;
-    }
-
-    @Override
-    public List<Author> findByNameLike(String name) {
-        try {
-            return authorRepository.findByNameLike(name);
-        } catch (SQLException e) {
-            throw new ServiceException("Error retrieving authors by author with name: " + name, e);
-        }
     }
 
     @Override

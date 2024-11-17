@@ -1,11 +1,12 @@
 package dev.gustavorh.lms_dev_10.controllers.books;
 
 import dev.gustavorh.lms_dev_10.config.DbContext;
+import dev.gustavorh.lms_dev_10.entities.Book;
 import dev.gustavorh.lms_dev_10.factories.implementations.DefaultServiceFactory;
 import dev.gustavorh.lms_dev_10.factories.implementations.JdbcRepositoryFactory;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IRepositoryFactory;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IServiceFactory;
-import dev.gustavorh.lms_dev_10.services.interfaces.IBookService;
+import dev.gustavorh.lms_dev_10.services.interfaces.IService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,9 +17,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@WebServlet("/books/ver")
+@WebServlet("/books/all")
 public class BookServlet extends HttpServlet {
-    private IBookService bookService;
+    private IService<Book> bookService;
 
     @Override
     public void init() throws ServletException {

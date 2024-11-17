@@ -1,27 +1,18 @@
 package dev.gustavorh.lms_dev_10.services.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.Category;
-import dev.gustavorh.lms_dev_10.repositories.interfaces.ICategoryRepository;
-import dev.gustavorh.lms_dev_10.services.interfaces.ICategoryService;
+import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
+import dev.gustavorh.lms_dev_10.services.interfaces.IService;
 import dev.gustavorh.lms_dev_10.utils.ServiceException;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class CategoryService implements ICategoryService {
-    private final ICategoryRepository categoryRepository;
+public class CategoryService implements IService<Category> {
+    private final IRepository<Category> categoryRepository;
 
-    public CategoryService(ICategoryRepository categoryRepository) {
+    public CategoryService(IRepository<Category> categoryRepository) {
         this.categoryRepository = categoryRepository;
-    }
-
-    @Override
-    public Category findByName(String name) {
-        try {
-            return categoryRepository.findByName(name);
-        } catch (SQLException e) {
-            throw new ServiceException("Error retrieving categories by author with name: " + name, e);
-        }
     }
 
     @Override

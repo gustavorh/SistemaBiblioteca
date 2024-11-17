@@ -1,36 +1,18 @@
 package dev.gustavorh.lms_dev_10.services.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.Book;
-import dev.gustavorh.lms_dev_10.repositories.interfaces.IBookRepository;
-import dev.gustavorh.lms_dev_10.services.interfaces.IBookService;
+import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
+import dev.gustavorh.lms_dev_10.services.interfaces.IService;
 import dev.gustavorh.lms_dev_10.utils.ServiceException;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class BookService implements IBookService {
-    private final IBookRepository bookRepository;
+public class BookService implements IService<Book> {
+    private final IRepository<Book> bookRepository;
 
-    public BookService(IBookRepository bookRepository) {
+    public BookService(IRepository<Book> bookRepository) {
         this.bookRepository = bookRepository;
-    }
-
-    @Override
-    public List<Book> findByAuthor(Long authorId) {
-        try {
-            return bookRepository.findByAuthor(authorId);
-        } catch (SQLException e) {
-            throw new ServiceException("Error retrieving books by author with id: " + authorId, e);
-        }
-    }
-
-    @Override
-    public List<Book> findByCategory(Long categoryId) {
-        try {
-            return bookRepository.findByCategory(categoryId);
-        } catch (SQLException e) {
-            throw new ServiceException("Error retrieving books by category with id: " + categoryId, e);
-        }
     }
 
     @Override

@@ -1,10 +1,8 @@
 package dev.gustavorh.lms_dev_10.repositories.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.Author;
-import dev.gustavorh.lms_dev_10.entities.Category;
-import dev.gustavorh.lms_dev_10.repositories.interfaces.IAuthorRepository;
+import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.utils.AuthorMapper;
-import dev.gustavorh.lms_dev_10.utils.CategoryMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,8 +12,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcAuthorRepository implements IAuthorRepository {
-    private Connection connection;
+public class JdbcAuthorRepository implements IRepository<Author> {
+    private final Connection connection;
     private final AuthorMapper authorMapper;
 
     public JdbcAuthorRepository(Connection connection) {
@@ -28,11 +26,6 @@ public class JdbcAuthorRepository implements IAuthorRepository {
     private static final String UPDATE_BY_ID = "UPDATE Autores SET nombre = ?, apellido = ?, nombre_completo = ? WHERE id_autor = ?";
     private static final String INSERT = "INSERT INTO Autores (nombre, apellido, nombre_completo) VALUES (?, ?, ?)";
     private static final String DELETE = "DELETE FROM Autores WHERE id_autor = ?";
-
-    @Override
-    public List<Author> findByNameLike(String name) throws SQLException {
-        return List.of();
-    }
 
     @Override
     public Author findById(Long id) throws SQLException {
