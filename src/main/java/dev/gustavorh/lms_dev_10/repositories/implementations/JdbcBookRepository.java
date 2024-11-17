@@ -3,6 +3,7 @@ package dev.gustavorh.lms_dev_10.repositories.implementations;
 import dev.gustavorh.lms_dev_10.entities.Book;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IBookRepository;
 import dev.gustavorh.lms_dev_10.utils.BookMapper;
+import dev.gustavorh.lms_dev_10.utils.IRowMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class JdbcBookRepository implements IBookRepository {
     private Connection connection;
-    private final BookMapper bookMapper;
+    private final IRowMapper<Book> bookMapper;
 
     public JdbcBookRepository(Connection connection) {
         this.connection = connection;

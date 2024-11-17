@@ -62,26 +62,56 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/home">Home</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        CRUD Operations
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                        <li>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/index.jsp">Home</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/books/ver">Books</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/authors/ver">Authors</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item disabled" href="${pageContext.request.contextPath}/categories">Categories</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item disabled" href="${pageContext.request.contextPath}/loans">Loans</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item disabled" href="${pageContext.request.contextPath}/members">Members</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item disabled" href="${pageContext.request.contextPath}/users">Users</a>
+                        </li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/books/ver">Books</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Reports
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/reports/activity">Member Activity Report</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/reports/report2">Report 2</a></li>
+                        <!-- Add more report options -->
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="${pageContext.request.contextPath}/authors">Authors</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="${pageContext.request.contextPath}/categories">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="${pageContext.request.contextPath}/loans">Loans</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="${pageContext.request.contextPath}/members">Members</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="${pageContext.request.contextPath}/users">Users</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        ${not empty sessionScope.username? sessionScope.username: "Cuenta"}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
+                        <li>
+                            <a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/auth/${not empty sessionScope.username? "logout": "login"}">
+                                ${not empty sessionScope.username? "Logout": "Login"}
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>

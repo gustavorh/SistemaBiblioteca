@@ -1,12 +1,15 @@
 package dev.gustavorh.lms_dev_10.factories.implementations;
 
 import dev.gustavorh.lms_dev_10.factories.interfaces.IRepositoryFactory;
+import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcUserRepository;
+import dev.gustavorh.lms_dev_10.repositories.implementations.MemberActivityReportRepository;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IAuthorRepository;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IBookRepository;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.ICategoryRepository;
 import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcAuthorRepository;
 import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcBookRepository;
 import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcCategoryRepository;
+import dev.gustavorh.lms_dev_10.repositories.interfaces.IUserRepository;
 
 import java.sql.Connection;
 
@@ -15,6 +18,11 @@ public class JdbcRepositoryFactory implements IRepositoryFactory {
 
     public JdbcRepositoryFactory(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public IUserRepository createUserRepository() {
+        return new JdbcUserRepository(connection);
     }
 
     @Override
@@ -30,5 +38,10 @@ public class JdbcRepositoryFactory implements IRepositoryFactory {
     @Override
     public ICategoryRepository createCategoryRepository() {
         return new JdbcCategoryRepository(connection);
+    }
+
+    @Override
+    public MemberActivityReportRepository createMemberActivityReportRepository() {
+        return new MemberActivityReportRepository(connection);
     }
 }
