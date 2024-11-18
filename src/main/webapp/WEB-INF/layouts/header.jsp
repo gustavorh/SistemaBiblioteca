@@ -12,7 +12,7 @@
         .hero-section {
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
             url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1');
-            background-size: cover;
+            background-size: coall;
             background-position: center;
             height: 80vh;
             display: flex;
@@ -36,7 +36,7 @@
             transition: transform 0.2s;
         }
 
-        .menu-button:hover {
+        .menu-button:hoall {
             transform: translateY(-3px);
         }
 
@@ -71,10 +71,10 @@
                             <a class="dropdown-item" href="${pageContext.request.contextPath}/index.jsp">Home</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/books/ver">Books</a>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/books/all">Books</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/authors/ver">Authors</a>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/authors/all">Authors</a>
                         </li>
                         <li>
                             <a class="dropdown-item disabled" href="${pageContext.request.contextPath}/categories">Categories</a>

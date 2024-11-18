@@ -1,15 +1,16 @@
 package dev.gustavorh.lms_dev_10.factories.interfaces;
 
-import dev.gustavorh.lms_dev_10.services.implementations.AuthorService;
-import dev.gustavorh.lms_dev_10.services.implementations.BookService;
-import dev.gustavorh.lms_dev_10.services.implementations.CategoryService;
-import dev.gustavorh.lms_dev_10.services.implementations.LoginService;
-import dev.gustavorh.lms_dev_10.services.implementations.UserService;
+import dev.gustavorh.lms_dev_10.entities.Author;
+import dev.gustavorh.lms_dev_10.entities.Book;
+import dev.gustavorh.lms_dev_10.entities.Category;
+import dev.gustavorh.lms_dev_10.services.interfaces.IAuthService;
+import dev.gustavorh.lms_dev_10.services.interfaces.IService;
+import dev.gustavorh.lms_dev_10.services.interfaces.IUserService;
 
 public interface IServiceFactory {
-    LoginService createLoginService();
-    UserService createUserService();
-    BookService createBookService();
-    AuthorService createAuthorService();
-    CategoryService createCategoryService();
+    IAuthService createAuthService();
+    IUserService createUserService();
+    IService<Book> createBookService();
+    IService<Author> createAuthorService();
+    IService<Category> createCategoryService();
 }

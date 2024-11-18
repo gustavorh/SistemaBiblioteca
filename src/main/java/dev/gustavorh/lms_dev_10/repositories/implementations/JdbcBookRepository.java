@@ -1,7 +1,7 @@
 package dev.gustavorh.lms_dev_10.repositories.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.Book;
-import dev.gustavorh.lms_dev_10.repositories.interfaces.IBookRepository;
+import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.utils.BookMapper;
 import dev.gustavorh.lms_dev_10.utils.IRowMapper;
 
@@ -13,8 +13,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcBookRepository implements IBookRepository {
-    private Connection connection;
+public class JdbcBookRepository implements IRepository<Book> {
+    private final Connection connection;
     private final IRowMapper<Book> bookMapper;
 
     public JdbcBookRepository(Connection connection) {
@@ -47,38 +47,6 @@ public class JdbcBookRepository implements IBookRepository {
     private static final String DELETE =
             "DELETE FROM Libros " +
             "WHERE id_libro = ?";
-
-    @Override
-    public List<Book> findByAuthor(Long authorId) throws SQLException {
-        List<Book> books = new ArrayList<>();
-        String sql = FIND_ALL + " WHERE A.id_autor = ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setLong(1, authorId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    books.add(bookMapper.mapRow(rs));
-                }
-            }
-        }
-        return books;
-    }
-
-    @Override
-    public List<Book> findByCategory(Long categoryId) throws SQLException {
-        List<Book> books = new ArrayList<>();
-        String sql = FIND_ALL + " WHERE C.id_categoria = ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setLong(1, categoryId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    books.add(bookMapper.mapRow(rs));
-                }
-            }
-        }
-        return books;
-    }
 
     @Override
     public Book findById(Long id) throws SQLException {

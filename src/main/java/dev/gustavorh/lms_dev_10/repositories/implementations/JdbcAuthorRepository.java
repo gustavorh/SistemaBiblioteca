@@ -3,6 +3,7 @@ package dev.gustavorh.lms_dev_10.repositories.implementations;
 import dev.gustavorh.lms_dev_10.entities.Author;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.utils.AuthorMapper;
+import dev.gustavorh.lms_dev_10.utils.IRowMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class JdbcAuthorRepository implements IRepository<Author> {
     private final Connection connection;
-    private final AuthorMapper authorMapper;
+    private final IRowMapper<Author> authorMapper;
 
     public JdbcAuthorRepository(Connection connection) {
         this.connection = connection;

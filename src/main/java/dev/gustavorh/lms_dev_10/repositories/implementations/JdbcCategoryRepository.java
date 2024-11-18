@@ -3,6 +3,7 @@ package dev.gustavorh.lms_dev_10.repositories.implementations;
 import dev.gustavorh.lms_dev_10.entities.Category;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.utils.CategoryMapper;
+import dev.gustavorh.lms_dev_10.utils.IRowMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class JdbcCategoryRepository implements IRepository<Category> {
     private final Connection connection;
-    private final CategoryMapper categoryMapper;
+    private final IRowMapper<Category> categoryMapper;
 
     public JdbcCategoryRepository(Connection connection) {
         this.connection = connection;
@@ -35,7 +36,6 @@ public class JdbcCategoryRepository implements IRepository<Category> {
                 if (rs.next()) {
                     return categoryMapper.mapRow(rs);
                 }
-                // TODO: Cast to optional in case ID is not found.
                 return null;
             }
         }

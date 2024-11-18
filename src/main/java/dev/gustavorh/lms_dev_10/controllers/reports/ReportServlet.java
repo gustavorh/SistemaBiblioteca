@@ -2,10 +2,8 @@ package dev.gustavorh.lms_dev_10.controllers.reports;
 
 import dev.gustavorh.lms_dev_10.config.DbContext;
 import dev.gustavorh.lms_dev_10.dtos.MemberActivityReportDTO;
-import dev.gustavorh.lms_dev_10.factories.implementations.DefaultServiceFactory;
 import dev.gustavorh.lms_dev_10.factories.implementations.JdbcRepositoryFactory;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IRepositoryFactory;
-import dev.gustavorh.lms_dev_10.factories.interfaces.IServiceFactory;
 import dev.gustavorh.lms_dev_10.repositories.implementations.MemberActivityReportRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/reports/*")

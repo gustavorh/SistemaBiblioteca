@@ -6,8 +6,7 @@ import dev.gustavorh.lms_dev_10.factories.implementations.DefaultServiceFactory;
 import dev.gustavorh.lms_dev_10.factories.implementations.JdbcRepositoryFactory;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IRepositoryFactory;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IServiceFactory;
-import dev.gustavorh.lms_dev_10.services.interfaces.ILoginService;
-import dev.gustavorh.lms_dev_10.services.interfaces.IUserService;
+import dev.gustavorh.lms_dev_10.services.interfaces.IAuthService;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,8 +22,7 @@ import java.util.Optional;
 
 @WebServlet("/auth/login")
 public class LoginServlet extends HttpServlet {
-    private IUserService userService;
-    private ILoginService loginService;
+    private IAuthService authService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -33,8 +31,7 @@ public class LoginServlet extends HttpServlet {
             IRepositoryFactory repositoryFactory = new JdbcRepositoryFactory(connection);
             IServiceFactory serviceFactory = new DefaultServiceFactory(repositoryFactory);
 
-            userService = serviceFactory.createUserService();
-            loginService = serviceFactory.createLoginService();
+            authService = serviceFactory.createAuthService();
         } catch (SQLException e) {
             throw new ServletException("Error initializing services", e);
         }
@@ -42,7 +39,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<String> usernameOptional = loginService.getUsername(req);
+        Optional<String> usernameOptional = authService.getUsername(req);
 
         if (usernameOptional.isPresent()) {
             resp.sendRedirect(req.getContextPath() + "/index.jsp");
@@ -51,17 +48,18 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    // Se encarga de procesar el login del usuario.
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        Optional<User> userOptional = userService.login(username, password);
+        Optional<User> userOptional = authService.login(username, password);
 
         if (userOptional.isPresent()) {
             HttpSession session = req.getSession();
-            session.setAttribute("username", username);
-            resp.sendRedirect(req.getContextPath() + "/books/ver");
+            session.setAttribute("loggedIn", true);
+            resp.sendRedirect(req.getContextPath() + "/books/all");
         } else {
             req.setAttribute("title", "Login incorrecto!");
             resp.sendRedirect(req.getContextPath() + "/auth/login");
