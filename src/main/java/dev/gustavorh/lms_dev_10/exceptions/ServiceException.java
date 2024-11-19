@@ -1,4 +1,4 @@
-package dev.gustavorh.lms_dev_10.utils;
+package dev.gustavorh.lms_dev_10.exceptions;
 
 public class ServiceException extends RuntimeException {
     public ServiceException(String message) {

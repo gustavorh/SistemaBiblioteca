@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:include page="/WEB-INF/layouts/header.jsp"/>
+<jsp:include page="/WEB-INF/layouts/header_bk.jsp"/>
 
 <div class="container">
     <h2>${reportTitle}</h2>
@@ -39,4 +39,4 @@
     </div>
 </div>
 
-<jsp:include page="/WEB-INF/layouts/footer.jsp"/>
+<jsp:include page="/WEB-INF/layouts/footer_bk.jsp"/>

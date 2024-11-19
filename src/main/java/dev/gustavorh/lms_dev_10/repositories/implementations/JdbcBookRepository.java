@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class JdbcBookRepository implements IRepository<Book> {
     private final Connection connection;
@@ -27,7 +28,7 @@ public class JdbcBookRepository implements IRepository<Book> {
             "FROM Libros L " +
                 "INNER JOIN Autores A ON L.id_autor = A.id_autor "+
                 "INNER JOIN Categorias C ON L.id_categoria = C.id_categoria "+
-            "ORDER BY L.id_libro ASC";
+            "ORDER BY L.id_libro";
 
     private static final String FIND_BY_ID =
             "SELECT L.id_libro,L.titulo, A.id_autor, A.nombre_completo AS autor, L.isbn, L.año_publicacion, C.id_categoria, C.nombre AS categoria "+
@@ -42,23 +43,22 @@ public class JdbcBookRepository implements IRepository<Book> {
 
     private static final String INSERT =
             "INSERT INTO Libros (titulo, id_autor, isbn, año_publicacion, id_categoria) " +
-            "VALUES ( ?, ?, ?, ?, ?)";
+            "VALUES (?, ?, ?, ?, ?)";
 
     private static final String DELETE =
             "DELETE FROM Libros " +
             "WHERE id_libro = ?";
 
     @Override
-    public Book findById(Long id) throws SQLException {
+    public Optional<Book> findById(Long id) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(FIND_BY_ID)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return bookMapper.mapRow(rs);
+                    return Optional.of(bookMapper.mapRow(rs));
                 }
-                // TODO: Cast to optional in case ID is not found.
-                return null;
             }
+            return Optional.empty();
         }
     }
 
@@ -99,8 +99,20 @@ public class JdbcBookRepository implements IRepository<Book> {
     }
 
     @Override
-    public void update(Book entity) {
+    public void update(Book entity) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(UPDATE_BY_ID)) {
+            ps.setString(1, entity.getTitle());
+            ps.setLong(2, entity.getAuthor().getAuthorId());
+            ps.setString(3, entity.getIsbn());
+            ps.setInt(4, entity.getPublicationYear());
+            ps.setLong(5, entity.getCategory().getCategoryId());
+            ps.setLong(6, entity.getBookId());
 
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating book failed, no rows affected.");
+            }
+        }
     }
 
     @Override

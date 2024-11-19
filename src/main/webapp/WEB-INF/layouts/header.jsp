@@ -1,120 +1,68 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${title}</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <style>
-        .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-            url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1');
-            background-size: coall;
-            background-position: center;
-            height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .menu-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .menu-button {
-            width: 200px;
-            margin: 10px;
-            padding: 15px;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
-        }
-
-        .menu-button:hoall {
-            transform: translateY(-3px);
-        }
-
-        .footer {
-            background-color: #333;
-            color: white;
-            padding: 20px 0;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management System</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            <i class="fas fa-book-reader me-2"></i>Library
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        CRUD Operations
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                        <li>
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/index.jsp">Home</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/books/all">Books</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/authors/all">Authors</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item disabled" href="${pageContext.request.contextPath}/categories">Categories</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item disabled" href="${pageContext.request.contextPath}/loans">Loans</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item disabled" href="${pageContext.request.contextPath}/members">Members</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item disabled" href="${pageContext.request.contextPath}/users">Users</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Reports
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/reports/activity">Member Activity Report</a></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/reports/report2">Report 2</a></li>
-                        <!-- Add more report options -->
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        ${not empty sessionScope.username? sessionScope.username: "Cuenta"}
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
-                        <li>
-                            <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/auth/${not empty sessionScope.username? "logout": "login"}">
-                                ${not empty sessionScope.username? "Logout": "Login"}
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+  <div class="container">
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/">Library System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Manage
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/books/all">Books</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/members/all">Members</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/users/all">Users</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/loans/all">Loans</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/authors/all">Authors</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/categories/all">Categories</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/statuses/all">Statuses</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/roles/all">Roles</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/permissions/all">Permissions</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <c:choose>
+          <c:when test="${sessionScope.username != null}">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  ${sessionScope.username}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/auth/logout">Logout</a></li>
+              </ul>
+            </li>
+          </c:when>
+          <c:otherwise>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                Account
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/auth/login">Login</a></li>
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/auth/register">Register</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/auth/guest">Continue as Guest</a></li>
+              </ul>
+            </li>
+          </c:otherwise>
+        </c:choose>
+      </ul>
     </div>
+  </div>
 </nav>
-<div class="container mt-5">

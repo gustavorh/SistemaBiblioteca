@@ -1,12 +1,13 @@
 package dev.gustavorh.lms_dev_10.services.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.Author;
+import dev.gustavorh.lms_dev_10.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.services.interfaces.IService;
-import dev.gustavorh.lms_dev_10.utils.ServiceException;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class AuthorService implements IService<Author> {
     private final IRepository<Author> authorRepository;
@@ -16,7 +17,7 @@ public class AuthorService implements IService<Author> {
     }
 
     @Override
-    public Author findById(Long id) {
+    public Optional<Author> findById(Long id) {
         try {
             return authorRepository.findById(id);
         } catch (SQLException e) {

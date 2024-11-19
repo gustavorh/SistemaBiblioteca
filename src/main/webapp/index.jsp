@@ -1,25 +1,42 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<jsp:include page="WEB-INF/layouts/header.jsp"/>
-<!-- Hero Section with Main Menu -->
-<section class="hero-section">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 text-center">
-                <div class="menu-card">
-                    <h1 class="mb-4 text-dark">Welcome to Modern Library</h1>
-                    <p class="text-muted mb-5">Your gateway to knowledge and discovery</p>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="WEB-INF/layouts/header.jsp" />
+<div class="container mt-5">
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Welcome to Library Management System</h1>
+        <p class="lead">Efficiently manage your library's resources and operations</p>
+        <hr class="my-4">
+        <p>Access our comprehensive library management tools to handle books, members, loans, and more.</p>
+        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/books/all" role="button">Browse Books</a>
+    </div>
 
-                    <div class="d-flex flex-wrap justify-content-center">
-                        <a href="${pageContext.request.contextPath}/auth/login" class="btn btn-primary menu-button m-2">
-                            <i class="fas fa-sign-in-alt me-2"></i>Log In
-                        </a>
-                        <a href="${pageContext.request.contextPath}/auth/register" class="btn btn-success menu-button m-2">
-                            <i class="fas fa-user-plus me-2"></i>Register
-                        </a>
-                    </div>
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Book Management</h5>
+                    <p class="card-text">Manage your library's book collection efficiently.</p>
+                    <a href="${pageContext.request.contextPath}/books/all" class="btn btn-primary">Manage Books</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Member Management</h5>
+                    <p class="card-text">Handle member registrations and accounts.</p>
+                    <a href="${pageContext.request.contextPath}/members/all" class="btn btn-primary">Manage Members</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Loan Management</h5>
+                    <p class="card-text">Track book loans and returns.</p>
+                    <a href="${pageContext.request.contextPath}/loans/all" class="btn btn-primary">Manage Loans</a>
                 </div>
             </div>
         </div>
     </div>
-</section>
-<jsp:include page="WEB-INF/layouts/footer.jsp"/>
+</div>
+<jsp:include page="WEB-INF/layouts/footer.jsp" />

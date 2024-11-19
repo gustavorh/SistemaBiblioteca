@@ -1,12 +1,14 @@
 package dev.gustavorh.lms_dev_10.services.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.Book;
+import dev.gustavorh.lms_dev_10.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.services.interfaces.IService;
-import dev.gustavorh.lms_dev_10.utils.ServiceException;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class BookService implements IService<Book> {
     private final IRepository<Book> bookRepository;
@@ -16,9 +18,14 @@ public class BookService implements IService<Book> {
     }
 
     @Override
-    public Book findById(Long id) {
+    public Optional<Book> findById(Long id) {
         try {
-            return bookRepository.findById(id);
+            Optional<Book> bookOptional = bookRepository.findById(id);
+            if (bookOptional.isPresent()) {
+                return bookOptional;
+            } else {
+                throw new EntityNotFoundException("El ID no existe en nuestros registros.");
+            }
         } catch (SQLException e) {
             throw new ServiceException("Error retrieving book with id: " + id, e);
         }
@@ -45,7 +52,11 @@ public class BookService implements IService<Book> {
     @Override
     public void update(Book entity) {
         try {
-            bookRepository.update(entity);
+            if (bookRepository.findById(entity.getBookId()).isPresent()) {
+                bookRepository.update(entity);
+            } else {
+                throw new EntityNotFoundException("El ID no existe en nuestros registros.");
+            }
         } catch (SQLException e) {
             throw new ServiceException("Error updating book", e);
         }
@@ -54,7 +65,11 @@ public class BookService implements IService<Book> {
     @Override
     public void delete(Long id) {
         try {
-            bookRepository.delete(id);
+            if (bookRepository.findById(id).isPresent()) {
+                bookRepository.delete(id);
+            } else {
+                throw new EntityNotFoundException("El ID no existe en nuestros registros.");
+            }
         } catch (SQLException e) {
             throw new ServiceException("Error deleting book with id: " + id, e);
         }

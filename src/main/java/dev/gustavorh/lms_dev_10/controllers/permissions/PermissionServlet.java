@@ -1,10 +1,8 @@
-package dev.gustavorh.lms_dev_10.controllers.users;
+package dev.gustavorh.lms_dev_10.controllers.permissions;
 
 import dev.gustavorh.lms_dev_10.config.DbContext;
-import dev.gustavorh.lms_dev_10.entities.Author;
-import dev.gustavorh.lms_dev_10.entities.Book;
-import dev.gustavorh.lms_dev_10.entities.Category;
-import dev.gustavorh.lms_dev_10.entities.User;
+import dev.gustavorh.lms_dev_10.entities.Permission;
+import dev.gustavorh.lms_dev_10.entities.Role;
 import dev.gustavorh.lms_dev_10.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.factories.implementations.DefaultServiceFactory;
 import dev.gustavorh.lms_dev_10.factories.implementations.JdbcRepositoryFactory;
@@ -24,9 +22,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet({"/users","/users/*"})
-public class UserServlet extends HttpServlet {
-    private IService<User> userService;
+@WebServlet({"/permissions","/permissions/*"})
+public class PermissionServlet extends HttpServlet {
+    private IService<Permission> permissionService;
 
     @Override
     public void init() throws ServletException {
@@ -35,7 +33,7 @@ public class UserServlet extends HttpServlet {
             IRepositoryFactory repositoryFactory = new JdbcRepositoryFactory(connection);
             IServiceFactory serviceFactory = new DefaultServiceFactory(repositoryFactory);
 
-            userService = serviceFactory.createUserService();
+            permissionService = serviceFactory.createPermissionService();
         } catch (SQLException e) {
             throw new ServletException("Error initializing services", e);
         }
@@ -49,32 +47,31 @@ public class UserServlet extends HttpServlet {
         try {
             switch (path) {
                 case "/", "/all":
-                    request.setAttribute("users", userService.findAll());
-                    request.getRequestDispatcher("/WEB-INF/views/users/users.jsp").forward(request, response);
+                    request.setAttribute("permissions", permissionService.findAll());
+                    request.getRequestDispatcher("/WEB-INF/views/permissions/permissions.jsp").forward(request, response);
                     break;
                 case "/create":
-                    request.setAttribute("user", new User()); // Empty book for the form
+                    request.setAttribute("permission", new Permission()); // Empty book for the form
                     request.setAttribute("action", "create");
-                    request.setAttribute("users", userService.findAll());
-                    request.getRequestDispatcher("/WEB-INF/views/users/form-user.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/permissions/form-permission.jsp").forward(request, response);
                     break;
                 case "/edit":
                     if (request.getParameter("id") == null || request.getParameter("id").isBlank()) {
                         throw new BadRequestException("El ID no debe ser nulo ni un string vacío.");
                     }
-                    request.setAttribute("user", userService.findById(Long.valueOf(request.getParameter("id"))).get());
+                    request.setAttribute("permission", permissionService.findById(Long.valueOf(request.getParameter("id"))).get());
                     request.setAttribute("action", "edit");
-                    request.getRequestDispatcher("/WEB-INF/views/users/form-user.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/permissions/form-permission.jsp").forward(request, response);
                     break;
                 case "/delete":
                     if (request.getParameter("id") == null || request.getParameter("id").isBlank()) {
                         throw new BadRequestException("El ID no debe ser nulo ni un string vacío.");
                     }
-                    userService.delete(Long.valueOf(request.getParameter("id")));
-                    response.sendRedirect(request.getContextPath() + "/users/all");
+                    permissionService.delete(Long.valueOf(request.getParameter("id")));
+                    response.sendRedirect(request.getContextPath() + "/permissions/all");
             }
         } catch (ServiceException e) {
-            throw new ServletException("Error processing user form", e);
+            throw new ServletException("Error processing permission form", e);
         }
     }
 
@@ -85,69 +82,68 @@ public class UserServlet extends HttpServlet {
         try {
             if (path.equals("/add")) {
                 // Populate book object from form parameters
-                User user = buildUser(request, response);
+                Permission permission = buildPermission(request, response);
 
                 // Validate the book data
-                Map<String, String> errors = validateUser(user);
+                Map<String, String> errors = validatePermission(permission);
 
                 if (!errors.isEmpty()) {
                     request.setAttribute("errors", errors);
-                    request.setAttribute("user", user);
+                    request.setAttribute("permission", permission);
                     request.setAttribute("action", "create");
-                    request.getRequestDispatcher("/WEB-INF/views/users/book-user.jsp")
+                    request.getRequestDispatcher("/WEB-INF/views/permissions/form-permission.jsp")
                             .forward(request, response);
                     return;
                 }
-                userService.save(user);
+                permissionService.save(permission);
                 // Redirect to book list
-                response.sendRedirect(request.getContextPath() + "/users/all");
+                response.sendRedirect(request.getContextPath() + "/permissions/all");
             } else if (path.equals("/edit")) {
                 if (request.getParameter("id") == null || request.getParameter("id").isBlank()) {
                     throw new BadRequestException("El ID no debe ser nulo ni un string vacío.");
                 }
-                User user = buildUser(request, response);
-                user.setUserId(Long.valueOf(request.getParameter("id")));
+                Permission permission = buildPermission(request, response);
+                permission.setPermissionId(Long.valueOf(request.getParameter("id")));
 
                 // Validate the book data
-                Map<String, String> errors = validateUser(user);
+                Map<String, String> errors = validatePermission(permission);
 
                 if (!errors.isEmpty()) {
                     request.setAttribute("errors", errors);
-                    request.setAttribute("user", user);
+                    request.setAttribute("permission", permission);
                     request.setAttribute("action", "edit");
-                    request.getRequestDispatcher("/WEB-INF/views/users/book-user.jsp")
+                    request.getRequestDispatcher("/WEB-INF/views/permissions/form-permission.jsp")
                             .forward(request, response);
                     return;
                 }
-                userService.update(user);
-                response.sendRedirect(request.getContextPath() + "/users/all");
+                permissionService.update(permission);
+                response.sendRedirect(request.getContextPath() + "/permissions/all");
             }
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } catch (ServiceException e) {
-            throw new ServletException("Error saving user", e);
+            throw new ServletException("Error saving permission", e);
         }
     }
 
-    private Map<String, String> validateUser(User user) {
+    private Map<String, String> validatePermission(Permission permission) {
         Map<String, String> errors = new HashMap<>();
 
-        if (user.getUserName() == null || user.getUserName().isBlank()) {
-            errors.put("userName", "El nombre de usuario es requerido");
+        if (permission.getName() == null || permission.getName().isBlank()) {
+            errors.put("name", "El nombre no puede estar vacío.");
         }
 
-        if (user.getPassword() == null || user.getPassword().isBlank()) {
-            errors.put("password", "La contraseña es requerida");
+        if (permission.getDescription() == null || permission.getDescription().isBlank()) {
+            errors.put("description", "La descripción no puede estar vacía.");
         }
 
         return errors;
     }
 
-    private User buildUser(HttpServletRequest request, HttpServletResponse response) {
-        User user = new User();
-        user.setUserName(request.getParameter("userName"));
-        user.setPassword(request.getParameter("password"));
-
-        return user;
+    private Permission buildPermission(HttpServletRequest request, HttpServletResponse response) {
+        Permission permission = new Permission();
+        permission.setName(request.getParameter("name"));
+        permission.setDescription(request.getParameter("description"));
+        return permission;
     }
 }

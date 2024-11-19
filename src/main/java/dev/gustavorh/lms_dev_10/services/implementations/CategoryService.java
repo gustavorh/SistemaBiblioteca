@@ -1,12 +1,13 @@
 package dev.gustavorh.lms_dev_10.services.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.Category;
+import dev.gustavorh.lms_dev_10.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.services.interfaces.IService;
-import dev.gustavorh.lms_dev_10.utils.ServiceException;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class CategoryService implements IService<Category> {
     private final IRepository<Category> categoryRepository;
@@ -16,7 +17,7 @@ public class CategoryService implements IService<Category> {
     }
 
     @Override
-    public Category findById(Long id) {
+    public Optional<Category> findById(Long id) {
         try {
             return categoryRepository.findById(id);
         } catch (SQLException e) {

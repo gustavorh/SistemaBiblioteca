@@ -38,6 +38,6 @@ public class AuthorServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setAttribute("authors", authorService.findAll());
-        request.getRequestDispatcher("/WEB-INF/views/authors/view-authors.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/authors/authors.jsp").forward(request, response);
     }
 }

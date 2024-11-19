@@ -1,12 +1,13 @@
 package dev.gustavorh.lms_dev_10.services.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.User;
+import dev.gustavorh.lms_dev_10.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IUserRepository;
 import dev.gustavorh.lms_dev_10.services.interfaces.IUserService;
-import dev.gustavorh.lms_dev_10.utils.ServiceException;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class UserService implements IUserService {
     private final IUserRepository userRepository;
@@ -16,11 +17,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findById(Long id) {
+    public Optional<User> findById(Long id) {
         try {
             return userRepository.findById(id);
         } catch (SQLException e) {
-            throw new ServiceException("Error retrieving book with id: " + id, e);
+            throw new ServiceException("Error retrieving user with id: " + id, e);
         }
     }
 
@@ -29,7 +30,7 @@ public class UserService implements IUserService {
         try {
             return userRepository.findAll();
         } catch (SQLException e) {
-            throw new ServiceException("Error retrieving all books", e);
+            throw new ServiceException("Error retrieving all users", e);
         }
     }
 
@@ -38,7 +39,7 @@ public class UserService implements IUserService {
         try {
             userRepository.save(entity);
         } catch (SQLException e) {
-            throw new ServiceException("Error saving book", e);
+            throw new ServiceException("Error saving user", e);
         }
     }
 
@@ -47,7 +48,7 @@ public class UserService implements IUserService {
         try {
             userRepository.update(entity);
         } catch (SQLException e) {
-            throw new ServiceException("Error updating book", e);
+            throw new ServiceException("Error updating user", e);
         }
     }
 
@@ -56,7 +57,7 @@ public class UserService implements IUserService {
         try {
             userRepository.delete(id);
         } catch (SQLException e) {
-            throw new ServiceException("Error deleting book with id: " + id, e);
+            throw new ServiceException("Error deleting user with id: " + id, e);
         }
     }
 

@@ -1,9 +1,9 @@
 package dev.gustavorh.lms_dev_10.repositories.implementations;
 
-import dev.gustavorh.lms_dev_10.entities.Category;
+import dev.gustavorh.lms_dev_10.entities.Status;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
-import dev.gustavorh.lms_dev_10.utils.CategoryMapper;
 import dev.gustavorh.lms_dev_10.utils.IRowMapper;
+import dev.gustavorh.lms_dev_10.utils.StatusMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,28 +14,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JdbcCategoryRepository implements IRepository<Category> {
+public class JdbcStatusRepository implements IRepository<Status> {
     private final Connection connection;
-    private final IRowMapper<Category> categoryMapper;
+    private final IRowMapper<Status> statusMapper;
 
-    public JdbcCategoryRepository(Connection connection) {
+    public JdbcStatusRepository(Connection connection) {
         this.connection = connection;
-        this.categoryMapper = new CategoryMapper();
+        this.statusMapper = new StatusMapper();
     }
 
-    private static final String FIND_ALL = "SELECT * FROM Categorias ORDER BY id_categoria ASC";
-    private static final String FIND_BY_ID = "SELECT * FROM Categorias WHERE id_categoria = ?";
-    private static final String UPDATE_BY_ID = "UPDATE Categorias SET nombre = ? WHERE id_categoria = ?";
-    private static final String INSERT = "INSERT INTO Categorias (nombre) VALUES (?)";
-    private static final String DELETE = "DELETE FROM Categorias WHERE id_categoria = ?";
+    private static final String FIND_ALL = "SELECT * FROM Estados";
+    private static final String FIND_BY_ID = "SELECT * FROM Estados WHERE id_estado = ?";
+    private static final String UPDATE_BY_ID = "UPDATE Estados SET nombre = ?, descripcion = ? WHERE id_estado = ?";
+    private static final String INSERT = "INSERT INTO Estados (nombre, descripcion) VALUES (?, ?)";
+    private static final String DELETE = "DELETE FROM Estados WHERE id_estado = ?";
 
     @Override
-    public Optional<Category> findById(Long id) throws SQLException {
+    public Optional<Status> findById(Long id) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(FIND_BY_ID)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(categoryMapper.mapRow(rs));
+                    return Optional.of(statusMapper.mapRow(rs));
                 }
             }
             return Optional.empty();
@@ -43,46 +43,49 @@ public class JdbcCategoryRepository implements IRepository<Category> {
     }
 
     @Override
-    public List<Category> findAll() throws SQLException {
-        List<Category> categories = new ArrayList<>();
+    public List<Status> findAll() throws SQLException {
+        List<Status> statuses = new ArrayList<>();
         try (Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(FIND_ALL)) {
             while (rs.next()) {
-                categories.add(categoryMapper.mapRow(rs));
+                statuses.add(statusMapper.mapRow(rs));
             }
         }
-        return categories;
+        return statuses;
     }
 
     @Override
-    public void save(Category entity) throws SQLException {
+    public void save(Status entity) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, entity.getCategoryId());
+            ps.setLong(1, entity.getStatusId());
             ps.setString(2, entity.getName());
+            ps.setString(3, entity.getDescription());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Creating category failed, no rows affected.");
+                throw new SQLException("Creating status failed, no rows affected.");
             }
 
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    entity.setCategoryId(generatedKeys.getLong(1));
+                    entity.setStatusId(generatedKeys.getLong(1));
                 } else {
-                    throw new SQLException("Creating category failed, no ID obtained.");
+                    throw new SQLException("Creating status failed, no ID obtained.");
                 }
             }
         }
     }
 
     @Override
-    public void update(Category entity) throws SQLException {
+    public void update(Status entity) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_BY_ID)) {
             ps.setString(1, entity.getName());
+            ps.setString(2, entity.getDescription());
+            ps.setLong(3, entity.getStatusId());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Updating category failed, no rows affected.");
+                throw new SQLException("Updating status failed, no rows affected.");
             }
         }
     }
@@ -94,7 +97,7 @@ public class JdbcCategoryRepository implements IRepository<Category> {
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Deleting category failed, no rows affected.");
+                throw new SQLException("Deleting status failed, no rows affected.");
             }
         }
     }

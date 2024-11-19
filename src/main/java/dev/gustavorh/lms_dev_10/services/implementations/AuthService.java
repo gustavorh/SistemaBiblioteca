@@ -1,19 +1,18 @@
 package dev.gustavorh.lms_dev_10.services.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.User;
-import dev.gustavorh.lms_dev_10.repositories.interfaces.IUserRepository;
 import dev.gustavorh.lms_dev_10.services.interfaces.IAuthService;
+import dev.gustavorh.lms_dev_10.services.interfaces.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-import java.sql.SQLException;
 import java.util.Optional;
 
 public class AuthService implements IAuthService {
-    private final IUserRepository userRepository;
+    private final IUserService userService;
 
-    public AuthService(IUserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AuthService(IUserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -26,12 +25,8 @@ public class AuthService implements IAuthService {
 
     @Override
     public Optional<User> login(String userName, String password){
-        try {
-            return Optional.ofNullable(userRepository.findByUserName(userName))
-                    .filter(user -> user.getPassword().equals(password));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return Optional.ofNullable(userService.findByUserName(userName))
+                .filter(user -> user.getPassword().equals(password)); // Returns user matching password.
     }
 
     @Override

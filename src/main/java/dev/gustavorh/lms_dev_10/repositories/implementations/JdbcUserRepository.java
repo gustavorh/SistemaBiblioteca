@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class JdbcUserRepository implements IUserRepository {
     private final Connection connection;
@@ -44,15 +45,15 @@ public class JdbcUserRepository implements IUserRepository {
     }
 
     @Override
-    public User findById(Long id) throws SQLException {
+    public Optional<User> findById(Long id) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(FIND_BY_ID)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return userMapper.mapRow(rs);
+                    return Optional.of(userMapper.mapRow(rs));
                 }
-                return null;
             }
+            return Optional.empty();
         }
     }
 
@@ -92,7 +93,15 @@ public class JdbcUserRepository implements IUserRepository {
 
     @Override
     public void update(User entity) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(UPDATE_BY_ID)) {
+            ps.setString(1, entity.getUserName());
+            ps.setString(2, entity.getPassword());
 
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating user failed, no rows affected.");
+            }
+        }
     }
 
     @Override

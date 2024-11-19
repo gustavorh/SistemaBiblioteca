@@ -3,10 +3,18 @@ package dev.gustavorh.lms_dev_10.factories.implementations;
 import dev.gustavorh.lms_dev_10.entities.Author;
 import dev.gustavorh.lms_dev_10.entities.Book;
 import dev.gustavorh.lms_dev_10.entities.Category;
+import dev.gustavorh.lms_dev_10.entities.Member;
+import dev.gustavorh.lms_dev_10.entities.Permission;
+import dev.gustavorh.lms_dev_10.entities.Role;
+import dev.gustavorh.lms_dev_10.entities.Status;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IRepositoryFactory;
 import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcAuthorRepository;
 import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcBookRepository;
 import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcCategoryRepository;
+import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcMemberRepository;
+import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcPermissionRepository;
+import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcRoleRepository;
+import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcStatusRepository;
 import dev.gustavorh.lms_dev_10.repositories.implementations.JdbcUserRepository;
 import dev.gustavorh.lms_dev_10.repositories.implementations.MemberActivityReportRepository;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
@@ -40,6 +48,26 @@ public class JdbcRepositoryFactory implements IRepositoryFactory {
     @Override
     public IRepository<Category> createCategoryRepository() {
         return new JdbcCategoryRepository(connection);
+    }
+
+    @Override
+    public IRepository<Member> createMemberRepository() {
+        return new JdbcMemberRepository(connection);
+    }
+
+    @Override
+    public IRepository<Status> createStatusRepository() {
+        return new JdbcStatusRepository(connection);
+    }
+
+    @Override
+    public IRepository<Role> createRoleRepository() {
+        return new JdbcRoleRepository(connection);
+    }
+
+    @Override
+    public IRepository<Permission> createPermissionRepository() {
+        return new JdbcPermissionRepository(connection);
     }
 
     @Override

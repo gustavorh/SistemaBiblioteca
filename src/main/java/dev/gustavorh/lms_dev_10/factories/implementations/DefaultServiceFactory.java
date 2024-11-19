@@ -3,12 +3,20 @@ package dev.gustavorh.lms_dev_10.factories.implementations;
 import dev.gustavorh.lms_dev_10.entities.Author;
 import dev.gustavorh.lms_dev_10.entities.Book;
 import dev.gustavorh.lms_dev_10.entities.Category;
+import dev.gustavorh.lms_dev_10.entities.Member;
+import dev.gustavorh.lms_dev_10.entities.Permission;
+import dev.gustavorh.lms_dev_10.entities.Role;
+import dev.gustavorh.lms_dev_10.entities.Status;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IRepositoryFactory;
 import dev.gustavorh.lms_dev_10.factories.interfaces.IServiceFactory;
 import dev.gustavorh.lms_dev_10.services.implementations.AuthService;
 import dev.gustavorh.lms_dev_10.services.implementations.AuthorService;
 import dev.gustavorh.lms_dev_10.services.implementations.BookService;
 import dev.gustavorh.lms_dev_10.services.implementations.CategoryService;
+import dev.gustavorh.lms_dev_10.services.implementations.MemberService;
+import dev.gustavorh.lms_dev_10.services.implementations.PermissionService;
+import dev.gustavorh.lms_dev_10.services.implementations.RoleService;
+import dev.gustavorh.lms_dev_10.services.implementations.StatusService;
 import dev.gustavorh.lms_dev_10.services.implementations.UserService;
 import dev.gustavorh.lms_dev_10.services.interfaces.IAuthService;
 import dev.gustavorh.lms_dev_10.services.interfaces.IService;
@@ -24,7 +32,7 @@ public class DefaultServiceFactory implements IServiceFactory {
 
     @Override
     public IAuthService createAuthService() {
-        return new AuthService(repositoryFactory.createUserRepository());
+        return new AuthService(createUserService());
     }
 
     @Override
@@ -45,5 +53,25 @@ public class DefaultServiceFactory implements IServiceFactory {
     @Override
     public IService<Category> createCategoryService() {
         return new CategoryService(repositoryFactory.createCategoryRepository());
+    }
+
+    @Override
+    public IService<Member> createMemberService() {
+        return new MemberService(repositoryFactory.createMemberRepository());
+    }
+
+    @Override
+    public IService<Status> createStatusService() {
+        return new StatusService(repositoryFactory.createStatusRepository());
+    }
+
+    @Override
+    public IService<Role> createRoleService() {
+        return new RoleService(repositoryFactory.createRoleRepository());
+    }
+
+    @Override
+    public IService<Permission> createPermissionService() {
+        return new PermissionService(repositoryFactory.createPermissionRepository());
     }
 }

@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class JdbcAuthorRepository implements IRepository<Author> {
     private final Connection connection;
@@ -22,23 +23,22 @@ public class JdbcAuthorRepository implements IRepository<Author> {
         this.authorMapper = new AuthorMapper();
     }
 
-    private static final String FIND_ALL = "SELECT * FROM Autores ORDER BY id_autor ASC";
+    private static final String FIND_ALL = "SELECT * FROM Autores ORDER BY id_autor";
     private static final String FIND_BY_ID = "SELECT * FROM Autores WHERE id_autor = ?";
     private static final String UPDATE_BY_ID = "UPDATE Autores SET nombre = ?, apellido = ?, nombre_completo = ? WHERE id_autor = ?";
     private static final String INSERT = "INSERT INTO Autores (nombre, apellido, nombre_completo) VALUES (?, ?, ?)";
     private static final String DELETE = "DELETE FROM Autores WHERE id_autor = ?";
 
     @Override
-    public Author findById(Long id) throws SQLException {
+    public Optional<Author> findById(Long id) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(FIND_BY_ID)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return authorMapper.mapRow(rs);
+                    return Optional.of(authorMapper.mapRow(rs));
                 }
-                // TODO: Cast to optional in case ID is not found.
-                return null;
             }
+            return Optional.empty();
         }
     }
 
@@ -79,7 +79,16 @@ public class JdbcAuthorRepository implements IRepository<Author> {
 
     @Override
     public void update(Author entity) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(UPDATE_BY_ID)) {
+            ps.setString(1, entity.getName());
+            ps.setString(2, entity.getSurname());
+            ps.setString(3, entity.getFullName());
 
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating author failed, no rows affected.");
+            }
+        }
     }
 
     @Override
