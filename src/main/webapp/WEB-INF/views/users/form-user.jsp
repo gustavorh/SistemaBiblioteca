@@ -29,7 +29,7 @@
                                    class="form-control ${not empty errors.userName ? 'is-invalid' : ''}"
                                    id="userName"
                                    name="userName"
-                                   value="${status.userName}"
+                                   value="${user.userName}"
                                    required>
                             <c:if test="${not empty errors.userName}">
                                 <div class="invalid-feedback">
@@ -44,7 +44,7 @@
                                    class="form-control ${not empty errors.password ? 'is-invalid' : ''}"
                                    id="password"
                                    name="password"
-                                   value="${status.password}"
+                                   value="${user.password}"
                                    required>
                             <c:if test="${not empty errors.password}">
                             <div class="invalid-feedback">

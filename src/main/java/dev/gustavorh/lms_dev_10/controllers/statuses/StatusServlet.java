@@ -80,7 +80,7 @@ public class StatusServlet extends HttpServlet {
             throws ServletException, IOException {
         String path = request.getPathInfo();
         try {
-            if (path.equals("/add")) {
+            if (path.equals("/create")) {
                 // Populate book object from form parameters
                 Status status = buildStatus(request, response);
 
@@ -139,6 +139,7 @@ public class StatusServlet extends HttpServlet {
     private Status buildStatus(HttpServletRequest request, HttpServletResponse response) {
         Status status = new Status();
         status.setName(request.getParameter("name"));
+        status.setDescription(request.getParameter("description"));
         return status;
     }
 }

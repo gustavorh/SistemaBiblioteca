@@ -57,10 +57,9 @@ public class JdbcAuthorRepository implements IRepository<Author> {
     @Override
     public void save(Author entity) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, entity.getAuthorId());
-            ps.setString(2, entity.getName());
-            ps.setString(3, entity.getSurname());
-            ps.setString(4, entity.getFullName());
+            ps.setString(1, entity.getName());
+            ps.setString(2, entity.getSurname());
+            ps.setString(3, entity.getFullName());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
@@ -83,6 +82,7 @@ public class JdbcAuthorRepository implements IRepository<Author> {
             ps.setString(1, entity.getName());
             ps.setString(2, entity.getSurname());
             ps.setString(3, entity.getFullName());
+            ps.setLong(4, entity.getAuthorId());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {

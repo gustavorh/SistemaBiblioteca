@@ -4,7 +4,7 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Users Management</h2>
-    <a href="${pageContext.request.contextPath}/roles/create" class="btn btn-primary">
+    <a href="${pageContext.request.contextPath}/users/create" class="btn btn-primary">
       Create New User
     </a>
   </div>

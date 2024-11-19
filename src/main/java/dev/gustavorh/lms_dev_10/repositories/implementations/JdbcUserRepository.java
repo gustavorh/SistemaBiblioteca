@@ -72,9 +72,8 @@ public class JdbcUserRepository implements IUserRepository {
     @Override
     public void save(User entity) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, entity.getUserId());
-            ps.setString(2, entity.getUserName());
-            ps.setString(3, entity.getPassword());
+            ps.setString(1, entity.getUserName());
+            ps.setString(2, entity.getPassword());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
@@ -96,6 +95,7 @@ public class JdbcUserRepository implements IUserRepository {
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_BY_ID)) {
             ps.setString(1, entity.getUserName());
             ps.setString(2, entity.getPassword());
+            ps.setLong(3, entity.getUserId());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {

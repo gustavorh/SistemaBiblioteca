@@ -25,12 +25,20 @@
             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/books/all">Books</a></li>
             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/members/all">Members</a></li>
             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/users/all">Users</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/loans/all">Loans</a></li>
+            <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/loans/all">Loans</a></li>
             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/authors/all">Authors</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/categories/all">Categories</a></li>
+            <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/categories/all">Categories</a></li>
             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/statuses/all">Statuses</a></li>
             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/roles/all">Roles</a></li>
             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/permissions/all">Permissions</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Reports
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/reports/activity">Member Activity Report</a></li>
           </ul>
         </li>
       </ul>

@@ -57,9 +57,8 @@ public class JdbcStatusRepository implements IRepository<Status> {
     @Override
     public void save(Status entity) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, entity.getStatusId());
-            ps.setString(2, entity.getName());
-            ps.setString(3, entity.getDescription());
+            ps.setString(1, entity.getName());
+            ps.setString(2, entity.getDescription());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {

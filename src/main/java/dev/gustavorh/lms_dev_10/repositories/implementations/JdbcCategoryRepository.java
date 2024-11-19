@@ -57,7 +57,6 @@ public class JdbcCategoryRepository implements IRepository<Category> {
     @Override
     public void save(Category entity) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, entity.getCategoryId());
             ps.setString(2, entity.getName());
 
             int affectedRows = ps.executeUpdate();
@@ -79,6 +78,7 @@ public class JdbcCategoryRepository implements IRepository<Category> {
     public void update(Category entity) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_BY_ID)) {
             ps.setString(1, entity.getName());
+            ps.setLong(2, entity.getCategoryId());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {

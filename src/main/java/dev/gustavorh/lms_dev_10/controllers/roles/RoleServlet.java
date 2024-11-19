@@ -80,7 +80,7 @@ public class RoleServlet extends HttpServlet {
             throws ServletException, IOException {
         String path = request.getPathInfo();
         try {
-            if (path.equals("/add")) {
+            if (path.equals("/create")) {
                 // Populate book object from form parameters
                 Role role = buildRole(request, response);
 

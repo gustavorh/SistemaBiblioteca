@@ -37,7 +37,7 @@ public class MemberActivityReportRepository {
                     "    INNER JOIN Estados e ON m.id_estado = e.id_estado " +
                     "    LEFT JOIN Prestamos p ON m.id_miembro = p.id_miembro " +
                     "GROUP BY  " +
-                    "\tm.id_miembro, " +
+                    "    m.id_miembro, " +
                     "    m.RUT, " +
                     "    m.nombre, " +
                     "    m.apellido_paterno, " +

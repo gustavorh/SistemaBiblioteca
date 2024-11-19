@@ -83,7 +83,7 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         String path = request.getPathInfo();
         try {
-            if (path.equals("/add")) {
+            if (path.equals("/create")) {
                 // Populate book object from form parameters
                 User user = buildUser(request, response);
 
@@ -94,7 +94,7 @@ public class UserServlet extends HttpServlet {
                     request.setAttribute("errors", errors);
                     request.setAttribute("user", user);
                     request.setAttribute("action", "create");
-                    request.getRequestDispatcher("/WEB-INF/views/users/book-user.jsp")
+                    request.getRequestDispatcher("/WEB-INF/views/users/form-user.jsp")
                             .forward(request, response);
                     return;
                 }
