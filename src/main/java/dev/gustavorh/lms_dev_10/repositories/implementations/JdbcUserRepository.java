@@ -56,7 +56,6 @@ public class JdbcUserRepository implements IUserRepository {
                 throw new SQLException("Updating user role failed, no rows affected.");
             }
         }
-
     }
 
     @Override
