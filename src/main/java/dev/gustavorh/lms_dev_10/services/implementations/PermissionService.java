@@ -1,7 +1,6 @@
 package dev.gustavorh.lms_dev_10.services.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.Permission;
-import dev.gustavorh.lms_dev_10.entities.Role;
 import dev.gustavorh.lms_dev_10.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.services.interfaces.IService;

@@ -1,9 +1,6 @@
 package dev.gustavorh.lms_dev_10.controllers.users;
 
 import dev.gustavorh.lms_dev_10.config.DbContext;
-import dev.gustavorh.lms_dev_10.entities.Author;
-import dev.gustavorh.lms_dev_10.entities.Book;
-import dev.gustavorh.lms_dev_10.entities.Category;
 import dev.gustavorh.lms_dev_10.entities.User;
 import dev.gustavorh.lms_dev_10.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.factories.implementations.DefaultServiceFactory;

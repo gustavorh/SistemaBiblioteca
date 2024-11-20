@@ -1,11 +1,9 @@
 package dev.gustavorh.lms_dev_10.repositories.implementations;
 
 import dev.gustavorh.lms_dev_10.entities.Permission;
-import dev.gustavorh.lms_dev_10.entities.Role;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.utils.IRowMapper;
 import dev.gustavorh.lms_dev_10.utils.PermissionMapper;
-import dev.gustavorh.lms_dev_10.utils.RoleMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

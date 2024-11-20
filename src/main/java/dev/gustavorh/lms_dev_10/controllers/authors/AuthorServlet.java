@@ -2,7 +2,6 @@ package dev.gustavorh.lms_dev_10.controllers.authors;
 
 import dev.gustavorh.lms_dev_10.config.DbContext;
 import dev.gustavorh.lms_dev_10.entities.Author;
-import dev.gustavorh.lms_dev_10.entities.Role;
 import dev.gustavorh.lms_dev_10.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.factories.implementations.DefaultServiceFactory;
 import dev.gustavorh.lms_dev_10.factories.implementations.JdbcRepositoryFactory;

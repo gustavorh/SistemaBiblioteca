@@ -1,6 +1,5 @@
 package dev.gustavorh.lms_dev_10.repositories.implementations;
 
-import dev.gustavorh.lms_dev_10.entities.Member;
 import dev.gustavorh.lms_dev_10.entities.Role;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.utils.IRowMapper;
@@ -11,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

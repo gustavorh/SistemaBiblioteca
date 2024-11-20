@@ -1,6 +1,6 @@
 package dev.gustavorh.lms_dev_10.services.implementations;
 
-import dev.gustavorh.lms_dev_10.entities.Role;
+import dev.gustavorh.lms_dev_10.entities.RolePermissions;
 import dev.gustavorh.lms_dev_10.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.repositories.interfaces.IRepository;
 import dev.gustavorh.lms_dev_10.services.interfaces.IService;
@@ -10,19 +10,19 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public class RoleService implements IService<Role> {
-    private final IRepository<Role> roleRepository;
+public class RolePermissionsService implements IService<RolePermissions> {
+    private final IRepository<RolePermissions> rolePermissionsRepository;
 
-    public RoleService(IRepository<Role> roleRepository) {
-        this.roleRepository = roleRepository;
+    public RolePermissionsService(IRepository<RolePermissions> rolePermissionsRepository) {
+        this.rolePermissionsRepository = rolePermissionsRepository;
     }
 
     @Override
-    public Optional<Role> findById(Long id) {
+    public Optional<RolePermissions> findById(Long id) {
         try {
-            Optional<Role> memberOptional = roleRepository.findById(id);
-            if (memberOptional.isPresent()) {
-                return memberOptional;
+            Optional<RolePermissions> rolePermissionsOptional = rolePermissionsRepository.findById(id);
+            if (rolePermissionsOptional.isPresent()) {
+                return rolePermissionsOptional;
             } else {
                 throw new EntityNotFoundException("El ID no existe en nuestros registros.");
             }
@@ -32,28 +32,28 @@ public class RoleService implements IService<Role> {
     }
 
     @Override
-    public List<Role> findAll() {
+    public List<RolePermissions> findAll() {
         try {
-            return roleRepository.findAll();
+            return rolePermissionsRepository.findAll();
         } catch (SQLException e) {
             throw new ServiceException("Error retrieving all roles", e);
         }
     }
 
     @Override
-    public void save(Role entity) {
+    public void save(RolePermissions entity) {
         try {
-            roleRepository.save(entity);
+            rolePermissionsRepository.save(entity);
         } catch (SQLException e) {
             throw new ServiceException("Error saving role", e);
         }
     }
 
     @Override
-    public void update(Role entity) {
+    public void update(RolePermissions entity) {
         try {
-            if (roleRepository.findById(entity.getRoleId()).isPresent()) {
-                roleRepository.update(entity);
+            if (rolePermissionsRepository.findById(entity.getRole().getRoleId()).isPresent()) {
+                rolePermissionsRepository.update(entity);
             } else {
                 throw new EntityNotFoundException("El ID no existe en nuestros registros.");
             }
@@ -65,8 +65,8 @@ public class RoleService implements IService<Role> {
     @Override
     public void delete(Long id) {
         try {
-            if (roleRepository.findById(id).isPresent()) {
-                roleRepository.delete(id);
+            if (rolePermissionsRepository.findById(id).isPresent()) {
+                rolePermissionsRepository.delete(id);
             } else {
                 throw new EntityNotFoundException("El ID no existe en nuestros registros.");
             }

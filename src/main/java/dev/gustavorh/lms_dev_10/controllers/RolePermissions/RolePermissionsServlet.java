@@ -1,7 +1,9 @@
-package dev.gustavorh.lms_dev_10.controllers.statuses;
+package dev.gustavorh.lms_dev_10.controllers.RolePermissions;
 
 import dev.gustavorh.lms_dev_10.config.DbContext;
-import dev.gustavorh.lms_dev_10.entities.Status;
+import dev.gustavorh.lms_dev_10.entities.Permission;
+import dev.gustavorh.lms_dev_10.entities.Role;
+import dev.gustavorh.lms_dev_10.entities.RolePermissions;
 import dev.gustavorh.lms_dev_10.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.factories.implementations.DefaultServiceFactory;
 import dev.gustavorh.lms_dev_10.factories.implementations.JdbcRepositoryFactory;
@@ -21,9 +23,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet({"/statuses","/statuses/*"})
-public class StatusServlet extends HttpServlet {
-    private IService<Status> statusService;
+@WebServlet({"/role_permissions","/role_permissions/*"})
+public class RolePermissionsServlet extends HttpServlet {
+    private IService<RolePermissions> rolePermissionsService;
 
     @Override
     public void init() throws ServletException {
@@ -32,7 +34,7 @@ public class StatusServlet extends HttpServlet {
             IRepositoryFactory repositoryFactory = new JdbcRepositoryFactory(connection);
             IServiceFactory serviceFactory = new DefaultServiceFactory(repositoryFactory);
 
-            statusService = serviceFactory.createStatusService();
+            rolePermissionsService = serviceFactory.createRolePermissionsService();
         } catch (SQLException e) {
             throw new ServletException("Error initializing services", e);
         }
@@ -46,31 +48,31 @@ public class StatusServlet extends HttpServlet {
         try {
             switch (path) {
                 case "/", "/all":
-                    request.setAttribute("statuses", statusService.findAll());
-                    request.getRequestDispatcher("/WEB-INF/views/statuses/statuses.jsp").forward(request, response);
+                    request.setAttribute("rolePermissions", rolePermissionsService.findAll());
+                    request.getRequestDispatcher("/WEB-INF/views/role_permissions/role_permissions.jsp").forward(request, response);
                     break;
                 case "/create":
-                    request.setAttribute("status", new Status()); // Empty book for the form
+                    request.setAttribute("rolePermission", new RolePermissions()); // Empty book for the form
                     request.setAttribute("action", "create");
-                    request.getRequestDispatcher("/WEB-INF/views/statuses/form-status.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/role_permissions/form-role_permission.jsp").forward(request, response);
                     break;
                 case "/edit":
                     if (request.getParameter("id") == null || request.getParameter("id").isBlank()) {
                         throw new BadRequestException("El ID no debe ser nulo ni un string vacío.");
                     }
-                    request.setAttribute("status", statusService.findById(Long.valueOf(request.getParameter("id"))).get());
+                    request.setAttribute("rolePermission", rolePermissionsService.findById(Long.valueOf(request.getParameter("id"))).get());
                     request.setAttribute("action", "edit");
-                    request.getRequestDispatcher("/WEB-INF/views/statuses/form-status.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/role_permissions/form-role_permission.jsp").forward(request, response);
                     break;
                 case "/delete":
                     if (request.getParameter("id") == null || request.getParameter("id").isBlank()) {
                         throw new BadRequestException("El ID no debe ser nulo ni un string vacío.");
                     }
-                    statusService.delete(Long.valueOf(request.getParameter("id")));
-                    response.sendRedirect(request.getContextPath() + "/statuses/all");
+                    rolePermissionsService.delete(Long.valueOf(request.getParameter("id")));
+                    response.sendRedirect(request.getContextPath() + "/role_permissions/all");
             }
         } catch (ServiceException e) {
-            throw new ServletException("Error processing status form", e);
+            throw new ServletException("Error processing RolePermissions form", e);
         }
     }
 
@@ -81,64 +83,68 @@ public class StatusServlet extends HttpServlet {
         try {
             if (path.equals("/create")) {
                 // Populate book object from form parameters
-                Status status = buildStatus(request, response);
+                RolePermissions rolePermission = buildRolePermissions(request, response);
 
                 // Validate the book data
-                Map<String, String> errors = validateStatus(status);
+                Map<String, String> errors = validateRolePermissions(rolePermission);
 
                 if (!errors.isEmpty()) {
                     request.setAttribute("errors", errors);
-                    request.setAttribute("status", status);
+                    request.setAttribute("rolePermission", rolePermission);
                     request.setAttribute("action", "create");
-                    request.getRequestDispatcher("/WEB-INF/views/statuses/form-status.jsp")
+                    request.getRequestDispatcher("/WEB-INF/views/role_permissions/form-role_permission.jsp")
                             .forward(request, response);
                     return;
                 }
-                statusService.save(status);
+                rolePermissionsService.save(rolePermission);
                 // Redirect to book list
-                response.sendRedirect(request.getContextPath() + "/statuses/all");
+                response.sendRedirect(request.getContextPath() + "/role_permissions/all");
             } else if (path.equals("/edit")) {
                 if (request.getParameter("id") == null || request.getParameter("id").isBlank()) {
                     throw new BadRequestException("El ID no debe ser nulo ni un string vacío.");
                 }
-                Status status = buildStatus(request, response);
-                status.setStatusId(Long.valueOf(request.getParameter("id")));
+                RolePermissions rolePermission = buildRolePermissions(request, response);
 
                 // Validate the book data
-                Map<String, String> errors = validateStatus(status);
+                Map<String, String> errors = validateRolePermissions(rolePermission);
 
                 if (!errors.isEmpty()) {
                     request.setAttribute("errors", errors);
-                    request.setAttribute("status", status);
+                    request.setAttribute("rolePermission", rolePermission);
                     request.setAttribute("action", "edit");
-                    request.getRequestDispatcher("/WEB-INF/views/statuses/form-status.jsp")
+                    request.getRequestDispatcher("/WEB-INF/views/role_permissions/form-role_permission.jsp")
                             .forward(request, response);
                     return;
                 }
-                statusService.update(status);
-                response.sendRedirect(request.getContextPath() + "/statuses/all");
+                rolePermissionsService.update(rolePermission);
+                response.sendRedirect(request.getContextPath() + "/role_permissions/all");
             }
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } catch (ServiceException e) {
-            throw new ServletException("Error saving status", e);
+            throw new ServletException("Error saving RolePermissions", e);
         }
     }
 
-    private Map<String, String> validateStatus(Status status) {
+    private Map<String, String> validateRolePermissions(RolePermissions rolePermissions) {
         Map<String, String> errors = new HashMap<>();
 
-        if (status.getName() == null || status.getName().isBlank()) {
-            errors.put("name", "El nombre no puede estar vacío.");
-        }
 
         return errors;
     }
 
-    private Status buildStatus(HttpServletRequest request, HttpServletResponse response) {
-        Status status = new Status();
-        status.setName(request.getParameter("name"));
-        status.setDescription(request.getParameter("description"));
-        return status;
+    private RolePermissions buildRolePermissions(HttpServletRequest request, HttpServletResponse response) {
+        RolePermissions rolePermissions = new RolePermissions();
+        Role role = new Role();
+        Permission permission = new Permission();
+
+        role.setRoleId(Long.valueOf(request.getParameter("id_rol")));
+        role.setName(request.getParameter("nombre_rol"));
+        rolePermissions.setRole(role);
+        permission.setPermissionId(Long.valueOf(request.getParameter("id_permiso")));
+        permission.setName(request.getParameter("nombre_permiso"));
+        rolePermissions.setPermission(permission);
+
+        return rolePermissions;
     }
 }

@@ -73,6 +73,6 @@ public class LoginFilter implements Filter {
 
     private boolean isPublicPath(String path) {
         return PUBLIC_PATHS.stream()
-                .anyMatch(publicPath -> path.equals(publicPath));
+                .anyMatch(path::equals);
     }
 }
