@@ -4,4 +4,5 @@ import dev.gustavorh.lms_dev_10.entities.User;
 
 public interface IUserService extends IService<User> {
     User findByUserName(String userName);
+    void assignRole(Long userId, Long roleId);
 }

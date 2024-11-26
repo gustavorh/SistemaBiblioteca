@@ -69,4 +69,13 @@ public class UserService implements IUserService {
             throw new ServiceException("Error deleting user with username: " + userName, e);
         }
     }
+
+    @Override
+    public void assignRole(Long userId, Long roleId) {
+        try {
+            userRepository.updateRole(userId, roleId);
+        } catch (SQLException e) {
+            throw new ServiceException("Error assigning role to user with id: " + userId, e);
+        }
+    }
 }

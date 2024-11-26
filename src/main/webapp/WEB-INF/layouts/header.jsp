@@ -5,13 +5,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Library Management System</title>
+  <title>E-Lib</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/">Library System</a>
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/">E-Lib</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -19,28 +19,29 @@
       <ul class="navbar-nav me-auto">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-            Manage
+            Mantenedores
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/books/all">Books</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/members/all">Members</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/users/all">Users</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/loans/all">Loans</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/authors/all">Authors</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/categories/all">Categories</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/statuses/all">Statuses</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/books/all">Libros</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/members/all">Miembros</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/users/all">Usuarios</a></li>
             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/roles/all">Roles</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/permissions/all">Permissions</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/role_permissions/all">RolePermissions</a></li>
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/role_users/all">RoleUsers</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/loans/all">Préstamos</a></li>
+            <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/categories/all">Categorías</a></li>
+            <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/authors/all">Autores</a></li>
+            <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/statuses/all">Estados</a></li>
+            <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/permissions/all">Permisos</a></li>
+            <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/role_permissions/all">RolPermisos</a></li>
+            <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/role_users/all">RolUsuarios</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-            Reports
+            Reportes
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/reports/activity">Member Activity Report</a></li>
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/reports/activity">Actividad de Miembros</a></li>
           </ul>
         </li>
       </ul>
@@ -52,7 +53,7 @@
                   ${sessionScope.username}
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Profile</a></li>
+                <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/profile">Perfil</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/auth/logout">Logout</a></li>
               </ul>
@@ -65,9 +66,9 @@
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/auth/login">Login</a></li>
-                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/auth/register">Register</a></li>
+                <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/auth/register">Registrarse</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/auth/guest">Continue as Guest</a></li>
+                <li><a class="dropdown-item disabled" href="${pageContext.request.contextPath}/auth/guest">Continuar como Invitado</a></li>
               </ul>
             </li>
           </c:otherwise>

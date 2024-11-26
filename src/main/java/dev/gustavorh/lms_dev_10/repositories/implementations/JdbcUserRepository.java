@@ -29,7 +29,7 @@ public class JdbcUserRepository implements IUserRepository {
     private static final String UPDATE_BY_ID = "UPDATE Usuarios SET usuario = ?, clave = ? WHERE id_usuario = ?";
     private static final String INSERT = "INSERT INTO Usuarios (usuario, clave) VALUES (?, ?)";
     private static final String DELETE = "DELETE FROM Usuarios WHERE id_usuario = ?";
-    private static final String UPDATE_ROLE_BY_ID = "UPDATE Usuarios SET id = ? WHERE id_usuario = ?";
+    private static final String UPDATE_ROLE_BY_ID = "UPDATE Roles_Usuarios SET id_rol = ? WHERE id_usuario = ?";
 
     @Override
     public User findByUserName(String userName) throws SQLException {
