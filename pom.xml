@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.gustavorh</groupId>
-    <artifactId>LMS_Dev_1-0</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>LMS_Dev_1-0</name>
+    <artifactId>LibraryMS</artifactId>
+    <version>4.3-public</version>
+    <name>LibraryMS</name>
     <packaging>war</packaging>
 
     <properties>

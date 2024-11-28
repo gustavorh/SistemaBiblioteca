@@ -26,8 +26,8 @@ public class JdbcBookRepository implements IRepository<Book> {
     private static final String FIND_ALL =
             "SELECT L.id_libro, L.titulo, A.id_autor, A.nombre_completo AS autor, L.isbn, L.año_publicacion, C.id_categoria, C.nombre AS categoria " +
             "FROM Libros L " +
-                "INNER JOIN Autores A ON L.id_autor = A.id_autor "+
-                "INNER JOIN Categorias C ON L.id_categoria = C.id_categoria "+
+                "INNER JOIN Autores A ON L.id_autor = A.id_autor " +
+                "INNER JOIN Categorias C ON L.id_categoria = C.id_categoria " +
             "ORDER BY L.id_libro";
 
     private static final String FIND_BY_ID =

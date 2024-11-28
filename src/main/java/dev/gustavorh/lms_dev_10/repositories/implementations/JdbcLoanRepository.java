@@ -25,14 +25,14 @@ public class JdbcLoanRepository implements IRepository<Loan> {
     }
 
     private static final String FIND_ALL =
-            "SELECT p.*, l.titulo, m.nombre, m.apellido_paterno, m.apellido_materno" +
+            "SELECT p.*, l.titulo, m.nombre, m.apellido_paterno, m.apellido_materno " +
                     "FROM Prestamos p " +
                     "INNER JOIN Libros l ON l.id_libro = p.id_libro " +
                     "INNER JOIN Miembros m ON m.id_miembro = p.id_miembro " +
                     "ORDER BY p.id_prestamo";
 
     private static final String FIND_BY_ID =
-            "SELECT p.*, l.titulo, m.nombre, m.apellido_paterno, m.apellido_materno" +
+            "SELECT p.*, l.titulo, m.nombre, m.apellido_paterno, m.apellido_materno " +
                     "FROM Prestamos p " +
                     "INNER JOIN Libros l ON l.id_libro = p.id_libro " +
                     "INNER JOIN Miembros m ON m.id_miembro = p.id_miembro " +

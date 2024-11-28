@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DbContext {
-    private static final String url = "jdbc:sqlserver://localhost:1433;databaseName=LMS_Testing;trustServerCertificate=true";
+    private static final String url = "jdbc:sqlserver://localhost:1433;databaseName=Biblioteca;trustServerCertificate=true";
     private static final String username = "sa";
     private static final String password = "^.r}fPr~A/Kj";
 
