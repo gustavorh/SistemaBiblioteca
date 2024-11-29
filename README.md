@@ -60,6 +60,7 @@ Esta combinación de arquitectura, patrones de diseño y tecnologías garantiza 
 2. [Construcción de la Aplicación](#construcción-de-la-aplicación)
 3. [Despliegue de la Aplicación](#despliegue-de-la-aplicación)
 4. [Diagrama ER](#diagrama-er)
+5. [Diccionario de Datos](DiccionarioDatos.md)
 
 ---
 
