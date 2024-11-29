@@ -6,7 +6,7 @@
 
     <groupId>dev.gustavorh</groupId>
     <artifactId>LibraryMS</artifactId>
-    <version>4.3-public</version>
+    <version>4.4-public</version>
     <name>LibraryMS</name>
     <packaging>war</packaging>
 

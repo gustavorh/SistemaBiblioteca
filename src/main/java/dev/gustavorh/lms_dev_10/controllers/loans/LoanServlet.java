@@ -27,6 +27,7 @@ import java.util.Map;
 @WebServlet({"/loans","/loans/*"})
 public class LoanServlet extends HttpServlet {
     private IService<Loan> loanService;
+    private IService<Member> memberService;
 
     @Override
     public void init() throws ServletException {
@@ -36,6 +37,7 @@ public class LoanServlet extends HttpServlet {
             IServiceFactory serviceFactory = new DefaultServiceFactory(repositoryFactory);
 
             loanService = serviceFactory.createLoanService();
+            memberService = serviceFactory.createMemberService();
         } catch (SQLException e) {
             throw new ServletException("Error initializing services", e);
         }
@@ -55,6 +57,7 @@ public class LoanServlet extends HttpServlet {
                 case "/create":
                     request.setAttribute("loan", new Loan()); // Empty book for the form
                     request.setAttribute("action", "create");
+                    request.setAttribute("members", memberService.findAll());
                     request.getRequestDispatcher("/WEB-INF/views/loans/form-loan.jsp").forward(request, response);
                     break;
                 case "/edit":
@@ -63,6 +66,7 @@ public class LoanServlet extends HttpServlet {
                     }
                     request.setAttribute("loan", loanService.findById(Long.valueOf(request.getParameter("id"))).get());
                     request.setAttribute("action", "edit");
+                    request.setAttribute("members", memberService.findAll());
                     request.getRequestDispatcher("/WEB-INF/views/loans/form-loan.jsp").forward(request, response);
                     break;
                 case "/delete":

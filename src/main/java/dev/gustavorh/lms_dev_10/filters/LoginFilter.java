@@ -22,6 +22,11 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Este filtro es responsable de tomar el request del cliente
+ * y evaluar si el usuario está autenticado.
+ * Aplica para todos los recursos. (/*)
+ */
 @WebFilter({"/*"})
 public class LoginFilter implements Filter {
     private IAuthService authService;

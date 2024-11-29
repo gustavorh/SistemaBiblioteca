@@ -87,7 +87,7 @@ public class AuthServlet extends HttpServlet {
                     HttpSession session = req.getSession();
                     session.setAttribute("loggedIn", true);
                     session.setAttribute("username", username);
-                    resp.sendRedirect(req.getContextPath() + "/books/all");
+                    resp.sendRedirect(req.getContextPath() + "/");
                 } else {
                     req.setAttribute("title", "Login incorrecto!");
                     resp.sendRedirect(req.getContextPath() + "/auth/login");

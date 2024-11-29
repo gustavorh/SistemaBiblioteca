@@ -5,6 +5,9 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Optional;
 
+/**
+ * Esta interfaz brinda implementaciones para la lógica de negocio.
+ */
 public interface IAuthService {
     Boolean isLoggedIn(HttpServletRequest request);
     Optional<String> getUsername(HttpServletRequest request);
