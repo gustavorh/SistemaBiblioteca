@@ -1,28 +1,28 @@
-# ===== build: Maven + JDK 17 (sin mvnw) =====
+# ===== build: Maven + JDK 17 =====
 FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /workspace
 
-# Copia POM primero para cachear dependencias
+# Cache de dependencias
 COPY pom.xml .
-# Baja dependencias para cache, sin tests (acelera builds repetidos)
 RUN mvn -B -e -DskipTests dependency:go-offline
 
-# Copia el código
+# Código fuente
 COPY src ./src
 
-# Empaqueta WAR con logs "normales" (usa -X si quieres debug)
+# Empaquetar WAR
 RUN mvn -B -e -DskipTests package
 
-# ===== runtime: Tomcat 10 + JDK 17 =====
+# ===== runtime: Tomcat 10.1 + JDK 17 =====
 FROM tomcat:10.1-jdk17-temurin
 WORKDIR /usr/local/tomcat
+
 # Limpia apps por defecto
 RUN rm -rf webapps/*
 
-# Variables para tu DbContext (lee con System.getenv)
+# Vars de entorno para tu DbContext
 ENV DB_URL="" DB_USER="" DB_PASSWORD=""
 
-# Copia el WAR compilado como ROOT.war
+# Copia WAR como ROOT
 COPY --from=build /workspace/target/*.war webapps/ROOT.war
 
 EXPOSE 8001
