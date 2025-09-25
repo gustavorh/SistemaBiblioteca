@@ -1,25 +1,32 @@
-# ===== build: usa el wrapper y JDK 17 =====
+# ===== STAGE: build =====
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /workspace
-# Copiamos todo porque mvnw y .mvn están en el repo
+
+# Copiamos TODO para usar mvnw y .mvn tal cual el repo
 COPY . .
-# Permisos por si el wrapper no es ejecutable
-RUN chmod +x mvnw
+RUN chmod +x mvnw || true
 
-# Construye con log VERBOSO y sin tests
-# (sin -q, con -X para stack trace si falla; puedes quitar -X tras arreglar)
-RUN ./mvnw -V --no-transfer-progress -DskipTests -X package
+# Info de entorno para trazar
+RUN java -version && ./mvnw -v
 
-# ===== runtime: Tomcat 10 con JDK 17 =====
+# Build con logs detallados; si falla, mostramos reportes y salimos con 1
+# -X = debug; --no-transfer-progress = logs más limpios
+RUN ./mvnw -DskipTests -X --no-transfer-progress package \
+  || (echo '--- SUREFIRE / FAILSAFE REPORTS ---' && \
+      (ls -lah target/surefire-reports || true) && \
+      (cat target/surefire-reports/*.txt 2>/dev/null || true) && \
+      (ls -lah target/failsafe-reports || true) && \
+      (cat target/failsafe-reports/*.txt 2>/dev/null || true) && \
+      echo '--- EFFECTIVE POM (recorte) ---' && \
+      ./mvnw -q help:effective-pom -DskipTests | sed -n '1,200p' && \
+      exit 1)
+
+# ===== STAGE: runtime =====
 FROM tomcat:10.1-jdk17-temurin
 WORKDIR /usr/local/tomcat
-# Limpia apps por defecto
 RUN rm -rf webapps/*
-# Variables para DB (leídas por tu DbContext vía System.getenv)
 ENV DB_URL="" DB_USER="" DB_PASSWORD=""
-# Copia el WAR como ROOT.war
 COPY --from=build /workspace/target/*.war webapps/ROOT.war
-
 EXPOSE 8001
 HEALTHCHECK --interval=15s --timeout=5s --retries=10 CMD wget -qO- http://localhost:8001/ || exit 1
 CMD ["catalina.sh", "run"]
