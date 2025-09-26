@@ -1,32 +1,44 @@
-# ===== build: Maven + JDK 17 =====
-FROM maven:3.9-eclipse-temurin-17 AS build
-WORKDIR /workspace
+# Multi-stage build for Java web application
+FROM maven:3.9.6-openjdk-17-slim AS build
 
-# Cache de dependencias
+# Set working directory
+WORKDIR /app
+
+# Copy pom.xml first for better layer caching
 COPY pom.xml .
-RUN mvn -B -e -DskipTests dependency:go-offline
 
-# Código fuente
+# Download dependencies (this layer will be cached if pom.xml doesn't change)
+RUN mvn dependency:go-offline -B
+
+# Copy source code
 COPY src ./src
 
-# Empaquetar WAR
-RUN mvn -B -e -DskipTests package
+# Build the application
+RUN mvn clean package -DskipTests
 
-# ===== runtime: Tomcat 10.1 + JDK 17 =====
-FROM tomcat:10.1-jdk17-temurin
-WORKDIR /usr/local/tomcat
+# Runtime stage
+FROM tomcat:10.1-jdk17-openjdk-slim
 
-# Limpia apps por defecto
-RUN rm -rf webapps/*
+# Install curl for health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-# Vars de entorno para tu DbContext
-ENV DB_URL="" DB_USER="" DB_PASSWORD=""
+# Remove default Tomcat webapps
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copia WAR como ROOT
-COPY --from=build /workspace/target/*.war webapps/ROOT.war
+# Copy the built WAR file from build stage
+COPY --from=build /app/target/LibraryMS.war /usr/local/tomcat/webapps/ROOT.war
 
-EXPOSE 8001
-HEALTHCHECK --interval=15s --timeout=5s --retries=10 \
-  CMD wget -qO- http://localhost:8001/ || exit 1
+# Create a non-root user for security
+RUN groupadd -r tomcat && useradd -r -g tomcat tomcat
+RUN chown -R tomcat:tomcat /usr/local/tomcat
+USER tomcat
 
+# Expose port 8080
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
+
+# Start Tomcat
 CMD ["catalina.sh", "run"]
