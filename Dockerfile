@@ -1,5 +1,5 @@
 # Multi-stage build for Java web application
-FROM maven:3.9.6-openjdk-17-slim AS build
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 
 # Set working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Runtime stage
-FROM tomcat:10.1-jdk17-openjdk-slim
+FROM tomcat:10.1-jdk17-temurin
 
 # Install curl for health checks
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
