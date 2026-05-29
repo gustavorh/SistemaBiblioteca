@@ -1,6 +1,6 @@
 <!-- WEB-INF/views/books/form.jsp -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <jsp:include page="/WEB-INF/layouts/header.jsp"/>
 
 <div class="container mt-4">
@@ -14,7 +14,7 @@
           <!-- Display global errors if any -->
           <c:if test="${not empty errorMessage}">
             <div class="alert alert-danger" role="alert">
-                ${errorMessage}
+                <c:out value="${errorMessage}"/>
             </div>
           </c:if>
 
@@ -22,6 +22,7 @@
             <c:if test="${action == 'edit'}">
               <input type="hidden" name="id" value="${permission.permissionId}">
             </c:if>
+            <input type="hidden" name="_csrf" value="${csrfToken}"/>
 
             <div class="mb-3">
               <label for="name" class="form-label">Nombre</label>
@@ -29,11 +30,11 @@
                      class="form-control ${not empty errors.name ? 'is-invalid' : ''}"
                      id="name"
                      name="name"
-                     value="${permission.name}"
+                     value="<c:out value='${permission.name}'/>"
                      required>
               <c:if test="${not empty errors.name}">
                 <div class="invalid-feedback">
-                    ${errors.name}
+                    <c:out value="${errors.name}"/>
                 </div>
               </c:if>
             </div>
@@ -44,11 +45,11 @@
                      class="form-control ${not empty errors.description ? 'is-invalid' : ''}"
                      id="description"
                      name="description"
-                     value="${permission.description}"
+                     value="<c:out value='${permission.description}'/>"
                      required>
               <c:if test="${not empty errors.description}">
                 <div class="invalid-feedback">
-                    ${errors.description}
+                    <c:out value="${errors.description}"/>
                 </div>
               </c:if>
 

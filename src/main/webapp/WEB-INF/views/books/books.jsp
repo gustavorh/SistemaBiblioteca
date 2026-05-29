@@ -29,19 +29,23 @@
           <tbody>
           <c:forEach items="${books}" var="book">
             <tr>
-              <td>${book.getBookId()}</td>
-              <td>${book.getTitle()}</td>
-              <td>${book.getAuthor().getFullName()}</td>
-              <td>${book.getIsbn()}</td>
-              <td>${book.getPublicationYear()}</td>
-              <td>${book.getCategory().getName()}</td>
+              <td><c:out value="${book.getBookId()}"/></td>
+              <td><c:out value="${book.getTitle()}"/></td>
+              <td><c:out value="${book.getAuthor().getFullName()}"/></td>
+              <td><c:out value="${book.getIsbn()}"/></td>
+              <td><c:out value="${book.getPublicationYear()}"/></td>
+              <td><c:out value="${book.getCategory().getName()}"/></td>
               <c:if test="${sessionScope.loggedIn}">
               <td>
                 <div class="btn-group" role="group">
                   <a href="${pageContext.request.contextPath}/books/edit?id=${book.bookId}"
                      class="btn btn-sm btn-warning">Edit</a>
-                  <button type="button" class="btn btn-sm btn-danger"
-                          onclick="confirmDelete(${book.bookId})">Delete</button>
+                  <form method="post" action="${pageContext.request.contextPath}/books/delete" style="display:inline;"
+                        onsubmit="return confirm('Are you sure you want to delete this record?')">
+                    <input type="hidden" name="id" value="${book.bookId}"/>
+                    <input type="hidden" name="_csrf" value="${csrfToken}"/>
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                  </form>
                 </div>
               </td>
               </c:if>
@@ -54,11 +58,4 @@
   </div>
 </div>
 
-<script>
-  function confirmDelete(id) {
-    if (confirm('Are you sure you want to delete this Book?')) {
-      window.location.href = '${pageContext.request.contextPath}/books/delete?id=' + id;
-    }
-  }
-</script>
 <jsp:include page="/WEB-INF/layouts/footer.jsp" />

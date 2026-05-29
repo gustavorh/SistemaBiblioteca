@@ -26,16 +26,20 @@
                     <tbody>
                     <c:forEach items="${permissions}" var="p">
                         <tr>
-                            <td>${p.permissionId}</td>
-                            <td>${p.name}</td>
-                            <td>${p.description}</td>
+                            <td><c:out value="${p.permissionId}"/></td>
+                            <td><c:out value="${p.name}"/></td>
+                            <td><c:out value="${p.description}"/></td>
                             <c:if test="${sessionScope.loggedIn}">
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a href="${pageContext.request.contextPath}/permissions/edit?id=${p.permissionId}"
                                            class="btn btn-sm btn-warning">Edit</a>
-                                        <button type="button" class="btn btn-sm btn-danger"
-                                                onclick="confirmDelete(${p.permissionId})">Delete</button>
+                                        <form method="post" action="${pageContext.request.contextPath}/permissions/delete" style="display:inline;"
+                                              onsubmit="return confirm('Are you sure you want to delete this record?')">
+                                          <input type="hidden" name="id" value="${p.permissionId}"/>
+                                          <input type="hidden" name="_csrf" value="${csrfToken}"/>
+                                          <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
                                     </div>
                                 </td>
                             </c:if>
@@ -48,11 +52,4 @@
     </div>
 </div>
 
-<script>
-    function confirmDelete(id) {
-        if (confirm('Are you sure you want to delete this Book?')) {
-            window.location.href = '${pageContext.request.contextPath}/permissions/delete?id=' + id;
-        }
-    }
-</script>
 <jsp:include page="/WEB-INF/layouts/footer.jsp" />

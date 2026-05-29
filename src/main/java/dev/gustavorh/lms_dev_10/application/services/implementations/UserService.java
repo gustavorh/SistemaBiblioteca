@@ -1,5 +1,6 @@
 package dev.gustavorh.lms_dev_10.application.services.implementations;
 
+import dev.gustavorh.lms_dev_10.application.security.PasswordEncoder;
 import dev.gustavorh.lms_dev_10.domain.entities.User;
 import dev.gustavorh.lms_dev_10.domain.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.infrastructure.repositories.interfaces.IUserRepository;
@@ -11,9 +12,11 @@ import java.util.Optional;
 
 public class UserService implements IUserService {
     private final IUserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(IUserRepository userRepository) {
+    public UserService(IUserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class UserService implements IUserService {
     @Override
     public void save(User entity) {
         try {
+            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
             userRepository.save(entity);
         } catch (SQLException e) {
             throw new ServiceException("Error saving user", e);
@@ -46,6 +50,7 @@ public class UserService implements IUserService {
     @Override
     public void update(User entity) {
         try {
+            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
             userRepository.update(entity);
         } catch (SQLException e) {
             throw new ServiceException("Error updating user", e);
@@ -66,7 +71,7 @@ public class UserService implements IUserService {
         try {
             return userRepository.findByUserName(userName);
         } catch (SQLException e) {
-            throw new ServiceException("Error deleting user with username: " + userName, e);
+            throw new ServiceException("Error retrieving user with username: " + userName, e);
         }
     }
 

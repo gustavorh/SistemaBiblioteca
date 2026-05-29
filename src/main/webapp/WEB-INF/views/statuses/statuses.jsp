@@ -26,16 +26,20 @@
           <tbody>
           <c:forEach items="${statuses}" var="s">
             <tr>
-              <td>${s.statusId}</td>
-              <td>${s.name}</td>
-              <td>${s.description}</td>
+              <td><c:out value="${s.statusId}"/></td>
+              <td><c:out value="${s.name}"/></td>
+              <td><c:out value="${s.description}"/></td>
               <c:if test="${sessionScope.loggedIn}">
                 <td>
                   <div class="btn-group" role="group">
                     <a href="${pageContext.request.contextPath}/statuses/edit?id=${s.statusId}"
                        class="btn btn-sm btn-warning">Edit</a>
-                    <button type="button" class="btn btn-sm btn-danger"
-                            onclick="confirmDelete(${s.statusId})">Delete</button>
+                    <form method="post" action="${pageContext.request.contextPath}/statuses/delete" style="display:inline;"
+                          onsubmit="return confirm('Are you sure you want to delete this record?')">
+                      <input type="hidden" name="id" value="${s.statusId}"/>
+                      <input type="hidden" name="_csrf" value="${csrfToken}"/>
+                      <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
                   </div>
                 </td>
               </c:if>
@@ -48,11 +52,4 @@
   </div>
 </div>
 
-<script>
-  function confirmDelete(id) {
-    if (confirm('Are you sure you want to delete this Book?')) {
-      window.location.href = '${pageContext.request.contextPath}/statuses/delete?id=' + id;
-    }
-  }
-</script>
 <jsp:include page="/WEB-INF/layouts/footer.jsp" />

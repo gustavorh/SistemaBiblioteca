@@ -1,6 +1,6 @@
 <!-- WEB-INF/views/books/form.jsp -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <jsp:include page="/WEB-INF/layouts/header.jsp"/>
 
 <div class="container mt-4">
@@ -14,7 +14,7 @@
                     <!-- Display global errors if any -->
                     <c:if test="${not empty errorMessage}">
                         <div class="alert alert-danger" role="alert">
-                                ${errorMessage}
+                                <c:out value="${errorMessage}"/>
                         </div>
                     </c:if>
 
@@ -22,6 +22,7 @@
                         <c:if test="${action == 'edit'}">
                             <input type="hidden" name="id" value="${member.memberId}">
                         </c:if>
+                        <input type="hidden" name="_csrf" value="${csrfToken}"/>
 
                         <div class="mb-3">
                             <label for="rut" class="form-label">RUT</label>
@@ -29,11 +30,11 @@
                                    class="form-control ${not empty errors.rut ? 'is-invalid' : ''}"
                                    id="rut"
                                    name="rut"
-                                   value="${member.rut}"
+                                   value="<c:out value='${member.rut}'/>"
                                    required>
                             <c:if test="${not empty errors.rut}">
                                 <div class="invalid-feedback">
-                                        ${errors.rut}
+                                        <c:out value="${errors.rut}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -48,13 +49,13 @@
                                 <c:forEach items="${users}" var="user">
                                     <option value="${user.userId}"
                                         ${member.user.userId == user.userId ? 'selected' : ''}>
-                                            ${user.userName}
+                                            <c:out value="${user.userName}"/>
                                     </option>
                                 </c:forEach>
                             </select>
                             <c:if test="${not empty errors.statusId}">
                                 <div class="invalid-feedback">
-                                        ${errors.statusId}
+                                        <c:out value="${errors.statusId}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -65,11 +66,11 @@
                                    class="form-control ${not empty errors.name ? 'is-invalid' : ''}"
                                    id="name"
                                    name="name"
-                                   value="${member.name}"
+                                   value="<c:out value='${member.name}'/>"
                                    required>
                             <c:if test="${not empty errors.name}">
                                 <div class="invalid-feedback">
-                                        ${errors.name}
+                                        <c:out value="${errors.name}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -80,11 +81,11 @@
                                    class="form-control ${not empty errors.paternalSurname ? 'is-invalid' : ''}"
                                    id="paternalSurname"
                                    name="paternalSurname"
-                                   value="${member.paternalSurname}"
+                                   value="<c:out value='${member.paternalSurname}'/>"
                                    required>
                             <c:if test="${not empty errors.paternalSurname}">
                                 <div class="invalid-feedback">
-                                        ${errors.paternalSurname}
+                                        <c:out value="${errors.paternalSurname}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -95,11 +96,11 @@
                                    class="form-control ${not empty errors.maternalSurname ? 'is-invalid' : ''}"
                                    id="maternalSurname"
                                    name="maternalSurname"
-                                   value="${member.maternalSurname}"
+                                   value="<c:out value='${member.maternalSurname}'/>"
                                    required>
                             <c:if test="${not empty errors.maternalSurname}">
                                 <div class="invalid-feedback">
-                                        ${errors.maternalSurname}
+                                        <c:out value="${errors.maternalSurname}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -110,11 +111,11 @@
                                    class="form-control ${not empty errors.registrationDate ? 'is-invalid' : ''}"
                                    id="registrationDate"
                                    name="registrationDate"
-                                   value="${member.registrationDate}"
+                                   value="<c:out value='${member.registrationDate}'/>"
                                    required>
                             <c:if test="${not empty errors.registrationDate}">
                                 <div class="invalid-feedback">
-                                        ${errors.registrationDate}
+                                        <c:out value="${errors.registrationDate}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -129,13 +130,13 @@
                                 <c:forEach items="${statuses}" var="status">
                                     <option value="${status.statusId}"
                                         ${member.status.statusId == status.statusId ? 'selected' : ''}>
-                                            ${status.name}
+                                            <c:out value="${status.name}"/>
                                     </option>
                                 </c:forEach>
                             </select>
                             <c:if test="${not empty errors.statusId}">
                                 <div class="invalid-feedback">
-                                        ${errors.statusId}
+                                        <c:out value="${errors.statusId}"/>
                                 </div>
                             </c:if>
                         </div>

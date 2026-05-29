@@ -25,15 +25,19 @@
                     <tbody>
                     <c:forEach items="${roleUsers}" var="ru">
                         <tr>
-                            <td>${ru.role.name}</td>
-                            <td>${ru.user.userName}</td>
+                            <td><c:out value="${ru.role.name}"/></td>
+                            <td><c:out value="${ru.user.userName}"/></td>
                             <c:if test="${sessionScope.loggedIn}">
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a href="${pageContext.request.contextPath}/role_users/edit?id=${ru.role.roleId}"
                                            class="btn btn-sm btn-warning">Edit</a>
-                                        <button type="button" class="btn btn-sm btn-danger"
-                                                onclick="confirmDelete(${ru.role.roleId})">Delete</button>
+                                        <form method="post" action="${pageContext.request.contextPath}/role_users/delete" style="display:inline;"
+                                              onsubmit="return confirm('Are you sure you want to delete this record?')">
+                                          <input type="hidden" name="id" value="${ru.role.roleId}"/>
+                                          <input type="hidden" name="_csrf" value="${csrfToken}"/>
+                                          <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
                                     </div>
                                 </td>
                             </c:if>
@@ -46,11 +50,4 @@
     </div>
 </div>
 
-<script>
-    function confirmDelete(id) {
-        if (confirm('Are you sure you want to delete this Book?')) {
-            window.location.href = '${pageContext.request.contextPath}/role_users/delete?id=' + id;
-        }
-    }
-</script>
 <jsp:include page="/WEB-INF/layouts/footer.jsp" />

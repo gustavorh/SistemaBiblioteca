@@ -1,148 +1,143 @@
+# Librio — Sistema de Gestión de Biblioteca
 
-# Sistema de Gestión de Biblioteca
+**Librio** es un sistema de gestión de biblioteca universitaria construido como proyecto de portafolio. Gestiona libros, autores, categorías, socios, préstamos, inventario, usuarios y control de roles/permisos.
 
-## Arquitectura y Patrones de Diseño
-
-### Arquitectura
-Este proyecto sigue una **Arquitectura por Capas**, que extiende el Modelo-Vista-Controlador (MVC) incorporando capas adicionales para garantizar una mayor modularidad y mantenibilidad. Los beneficios clave de usar una arquitectura por capas son:
-
-1. **Separación de Responsabilidades**: Cada capa es responsable de aspectos específicos de la aplicación, asegurando una clara separación entre la lógica de negocio, el acceso a datos y las capas de presentación.
-2. **Escalabilidad**: La arquitectura permite una fácil escalabilidad, ya que se pueden agregar nuevas funcionalidades o modificaciones a capas específicas sin impactar a las demás.
-3. **Capacidad de Pruebas**: Las capas aisladas hacen más efectivas las pruebas unitarias al permitir implementaciones simuladas para dependencias.
-4. **Reutilización**: La funcionalidad común puede encapsularse en componentes reutilizables, facilitando el mantenimiento y la extensión.
-5. **Colaboración Mejorada**: Los desarrolladores pueden trabajar en diferentes capas de manera independiente, permitiendo una colaboración eficiente en un entorno de equipo.
-
-Esta arquitectura incluye las siguientes capas:
-- **Capa de Presentación**: Maneja la interfaz de usuario utilizando JSP.
-- **Capa de Aplicación**: Gestiona la lógica de negocio y los servicios.
-- **Capa de Dominio**: Encapsula la lógica central del dominio y las entidades.
-- **Capa de Infraestructura**: Proporciona conectividad a la base de datos e implementaciones técnicas.
-
-### Patrones de Diseño
-El proyecto incorpora varios patrones de diseño ampliamente utilizados para mejorar la mantenibilidad, flexibilidad y escalabilidad:
-
-1. **Patrón Facade**:
-   - Simplifica la interacción con subsistemas complejos creando interfaces unificadas.
-   - Utilizado en este proyecto mediante la implementación de interfaces de servicio genéricas y sus implementaciones concretas usando Genéricos de Java.
-
-2. **Patrón Abstract Factory**:
-   - Proporciona una forma de encapsular la lógica de creación de objetos relacionados sin especificar sus clases concretas.
-   - Usado para instanciar objetos de servicio y repositorio, asegurando consistencia y flexibilidad en la gestión de dependencias.
-
-3. **Patrón Repositorio**:
-   - Separa la lógica de acceso a datos de la lógica de negocio.
-   - Aplicado en la capa de acceso a datos para gestionar operaciones CRUD para entidades, haciendo la capa de persistencia más abstracta y reutilizable.
-
-4. **Patrón Singleton**:
-   - Asegura que solo se cree una instancia de una clase y proporciona un punto de acceso global a ella.
-   - Implementado para gestionar el grupo de conexiones de base de datos, optimizando la utilización de recursos y mejorando el rendimiento.
+> **Estado de seguridad:** Ver `docs/SECURITY_AUDIT.md` para los hallazgos auditados y su prioridad de remediación.  
+> **Roadmap de refactor:** Ver `docs/REFACTORING_ROADMAP.md` (Fases 0–5, SOLID/DRY/patrones).
 
 ---
 
-## Tecnologías Utilizadas
+## Stack tecnológico
 
-### Lenguajes de Programación y Frameworks
-- **Java con Jakarta EE**: Lenguaje principal para el desarrollo de aplicaciones.
-- **Java JDBC**: Utilizado para implementar la capa de acceso a datos, gestionar conexiones de base de datos y ejecutar consultas.
-- **JSP (JavaServer Pages)**: Usado para construir la capa de presentación, permitiendo la generación de contenido dinámico.
+| Componente | Tecnología |
+|-----------|-----------|
+| Lenguaje | Java 17 |
+| Runtime web | Jakarta EE 10 — Servlet 6.0 + JSP/JSTL |
+| Persistencia | **JDBC puro** sobre SQL Server (`mssql-jdbc 12.6.1`) |
+| Servidor | Apache Tomcat 10.1 |
+| Empaquetado | WAR (`target/LibraryMS.war`) |
+| Build | Maven Wrapper (`./mvnw`) |
+| Contenedor | Docker (Eclipse Temurin 17) |
 
-### Infraestructura
-- **SQL Server Express**: Sistema de Gestión de Bases de Datos (DBMS) usado para almacenar y gestionar datos.
-- **Apache Tomcat 10**: Servidor de aplicaciones para desplegar y ejecutar la aplicación.
-- **Docker**: Utilizado para levantar instancias de SQL Server de forma rápida y consistente.
-
----
-
-Esta combinación de arquitectura, patrones de diseño y tecnologías garantiza que el proyecto sea robusto, mantenible y escalable, proporcionando una base sólida para futuras mejoras y despliegues.
-
-## Tabla de Contenidos
-1. [Configuración del Espacio de Trabajo](#configuración-del-espacio-de-trabajo)
-2. [Construcción de la Aplicación](#construcción-de-la-aplicación)
-3. [Despliegue de la Aplicación](#despliegue-de-la-aplicación)
-4. [Diagrama ER](#diagrama-er)
-5. [Diccionario de Datos](DiccionarioDatos.md)
+> **Nota:** el proyecto usa JDBC puro. No hay JPA ni `@Entity`. Las dependencias `jakarta.persistence-api` y `jakarta.ws.rs-api` en el `pom.xml` son legado — se eliminan en el refactor.
 
 ---
 
-## Configuración del Espacio de Trabajo
+## Arquitectura
 
-### 1. Configurar el Contenedor Docker de SQL Server
-Ejecuta los siguientes comandos para descargar e iniciar un contenedor Docker con SQL Server 2022:
+Arquitectura en capas (Layered Architecture) con separación presentation / application / domain / infrastructure:
 
-```bash
-docker pull mcr.microsoft.com/mssql/server:2022-latest
-
-docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<contraseña>" \
-   -p 1433:1433 --name mssql --hostname mssql \
-   -d \
-   mcr.microsoft.com/mssql/server:2022-latest
+```
+presentation/  → Servlets (Jakarta EE) + JSPs + Filtros
+application/   → Servicios de negocio + Abstract Factory + DTOs
+domain/        → Entidades (POJOs) + Excepciones de dominio
+infrastructure/→ JDBC: DbContext + Jdbc*Repository + IRowMapper
+utils/mappers/ → Mapeo ResultSet → Entidad
 ```
 
-> Reemplaza `<contraseña>` con una contraseña segura de tu elección.
+**Patrones aplicados:** Repository, Abstract Factory, Facade (interfaces de servicio), RowMapper.
 
-### 2. Configurar el Servidor Tomcat
-1. Descarga una instancia de Tomcat 10 desde el [sitio web oficial de Tomcat](https://tomcat.apache.org/).
-2. Navega al directorio `conf` dentro de la carpeta de instalación de Tomcat y edita el archivo **`tomcat-users.xml`**.
-3. Agrega la siguiente línea dentro de la etiqueta `<tomcat-users>`:
-   ```xml
-   <user username="admin" password="12345" roles="admin,manager-gui,manager-script"/>
-   ```
-   > **Nota:** Reemplaza la contraseña según tus requisitos de seguridad.
+Ver `docs/ARCHITECTURE.md` para el flujo completo de una request, el mapa de paquetes y el esquema de BD.
 
-### 3. Clonar el Repositorio
-Clona el repositorio de GitHub y ábrelo en IntelliJ IDEA:
+---
+
+## Variables de entorno
+
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `DB_URL` | JDBC connection string SQL Server | `jdbc:sqlserver://db:1433;databaseName=LibraryDB;encrypt=true;trustServerCertificate=true` |
+| `DB_USER` | Usuario de BD | `sa` |
+| `DB_PASSWORD` | Contraseña de BD | *(ver `.env.example`)* |
+
+Copiar `.env.example` → `.env` y completar antes de ejecutar.
+
+---
+
+## Inicio rápido con Docker Compose
 
 ```bash
-git clone https://github.com/gustavorh/SistemaBiblioteca.git
+# 1. Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tu contraseña
+
+# 2. Levantar SQL Server + app
+docker-compose up --build
+
+# 3. Abrir en el navegador
+open http://localhost:8080/LibraryMS
 ```
 
-- Abre la carpeta del proyecto en IntelliJ IDEA.
+El `docker-compose.yml` levanta SQL Server 2022 Express y la aplicación Tomcat. Esperar ~30 segundos a que SQL Server esté healthy antes de que la app conecte.
 
-### 4. Configurar la Base de Datos
-Ejecuta los siguientes scripts SQL encontrados en el repositorio:
-1. **`DDL.sql`** - Para crear la estructura de la base de datos.
-2. **`INSERTS.sql`** - Para poblar la base de datos con datos iniciales.
+**Después de levantar la BD por primera vez:**
 
----
+```bash
+# Ejecutar DDL (crea el esquema)
+docker exec -i <contenedor_db> /opt/mssql-tools18/bin/sqlcmd \
+  -S localhost -U sa -P "$DB_PASSWORD" -i /dev/stdin < DDL.sql
 
-## Construcción de la Aplicación
-
-Sigue estos pasos para configurar y construir la aplicación en IntelliJ IDEA:
-
-1. **Editar la Configuración de Ejecución:**
-   - Haz clic en `Ejecutar > Editar Configuraciones` en el menú de IntelliJ IDEA.
-   ![Editar Configuraciones](https://i.imgur.com/wQPlWFc.png)
-   - Haz clic en `Agregar Nueva Configuración` y selecciona `Servidor Tomcat (Local)`.
-   ![Servidor Tomcat (Local)](https://i.imgur.com/n7z9hOe.png)
-
-2. **Configurar el Servidor de Aplicaciones:**
-   - En `Servidor de Aplicaciones`, haz clic en `Configurar`.
-   ![Configurar servidor de aplicaciones](https://i.imgur.com/w8OJU2J.png)
-   - Agrega tu directorio de inicio de Tomcat.
-   ![Directorio de Tomcat](https://i.imgur.com/eRmkbdF.png)
-
-3. **Agregar Artefacto de Despliegue:**
-   - Ve a la pestaña `Despliegue`.
-   - Haz clic en `Agregar` y selecciona el archivo `.war` generado por el proyecto.
-
-4. **Aplicar y Ejecutar:**
-   - Guarda la configuración y haz clic en `Ejecutar` para iniciar la aplicación.
+# Cargar datos iniciales
+docker exec -i <contenedor_db> /opt/mssql-tools18/bin/sqlcmd \
+  -S localhost -U sa -P "$DB_PASSWORD" -i /dev/stdin < INSERTS.sql
+```
 
 ---
 
-## Despliegue de la Aplicación
+## Desarrollo local (sin Docker)
 
-> **Nota:** Esta sección está actualmente en desarrollo. Las próximas actualizaciones incluirán instrucciones detalladas de despliegue.
+### Prerequisitos
+
+- JDK 17
+- SQL Server (local o Docker)
+- Apache Tomcat 10.1
+
+### Build
+
+```bash
+# Compilar y empaquetar (sin tests)
+./mvnw -DskipTests clean package
+
+# Con tests (cuando estén implementados — ver Fase 0 del roadmap)
+./mvnw clean verify
+```
+
+El WAR se genera en `target/LibraryMS.war`. Desplegarlo en Tomcat o configurar una run configuration en IntelliJ IDEA apuntando al WAR.
+
+### Configurar Tomcat en IntelliJ IDEA
+
+1. `Run > Edit Configurations > Add New > Tomcat Server (Local)`
+2. En `Application Server`, apuntar al directorio de instalación de Tomcat 10.1.
+3. En la pestaña `Deployment`, agregar el artefacto `LibraryMS.war`.
+4. Configurar las variables de entorno `DB_URL`, `DB_USER`, `DB_PASSWORD`.
+5. Ejecutar.
 
 ---
+
+## Documentación
+
+| Documento | Descripción |
+|-----------|-------------|
+| `docs/SECURITY_AUDIT.md` | 14 hallazgos de seguridad priorizados + plan de remediación |
+| `docs/REFACTORING_ROADMAP.md` | Roadmap de 6 fases SOLID/DRY + dependencias nuevas requeridas |
+| `docs/ARCHITECTURE.md` | Arquitectura actual y objetivo, flujo de requests, esquema de BD |
+| `DiccionarioDatos.md` | Diccionario de datos de la base de datos |
+| `DDL.sql` | Script de creación de esquema SQL Server |
+| `INSERTS.sql` | Datos iniciales de prueba |
+
+---
+
 ## Diagrama ER
+
 ![Diagrama ER](https://i.imgur.com/uS2HhBA.jpeg)
+
 ---
 
 ## Contribución
-Siéntete libre de contribuir a este proyecto enviando pull requests o reportando issues.
+
+Pull requests bienvenidos. Ver `docs/REFACTORING_ROADMAP.md` para las áreas prioritarias de trabajo.
 
 ---
 
 ## Licencia
+
 Este proyecto está licenciado bajo la [Licencia MIT](LICENSE).

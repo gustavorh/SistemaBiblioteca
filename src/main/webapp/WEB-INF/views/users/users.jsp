@@ -17,7 +17,6 @@
           <tr>
             <th>ID</th>
             <th>Usuario</th>
-            <th>Contraseña</th>
             <c:if test="${sessionScope.loggedIn}">
               <th colspan="2">Acciones</th>
             </c:if>
@@ -26,16 +25,19 @@
           <tbody>
           <c:forEach items="${users}" var="u">
             <tr>
-              <td>${u.userId}</td>
-              <td>${u.userName}</td>
-              <td>${u.password}</td>
+              <td><c:out value="${u.userId}"/></td>
+              <td><c:out value="${u.userName}"/></td>
               <c:if test="${sessionScope.loggedIn}">
                 <td>
                   <div class="btn-group" role="group">
                     <a href="${pageContext.request.contextPath}/users/edit?id=${u.userId}"
                        class="btn btn-sm btn-warning">Edit</a>
-                    <button type="button" class="btn btn-sm btn-danger"
-                            onclick="confirmDelete(${u.userId})">Delete</button>
+                    <form method="post" action="${pageContext.request.contextPath}/users/delete" style="display:inline;"
+                          onsubmit="return confirm('Are you sure you want to delete this record?')">
+                      <input type="hidden" name="id" value="${u.userId}"/>
+                      <input type="hidden" name="_csrf" value="${csrfToken}"/>
+                      <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
                   </div>
                 </td>
               </c:if>
@@ -48,11 +50,4 @@
   </div>
 </div>
 
-<script>
-  function confirmDelete(id) {
-    if (confirm('Are you sure you want to delete this Book?')) {
-      window.location.href = '${pageContext.request.contextPath}/users/delete?id=' + id;
-    }
-  }
-</script>
 <jsp:include page="/WEB-INF/layouts/footer.jsp" />

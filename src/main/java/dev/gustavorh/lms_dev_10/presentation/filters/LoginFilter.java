@@ -77,7 +77,19 @@ public class LoginFilter implements Filter {
     }
 
     private boolean isPublicPath(String path) {
-        return PUBLIC_PATHS.stream()
-                .anyMatch(path::equals);
+        String normalized = normalizePath(path);
+        return PUBLIC_PATHS.stream().anyMatch(normalized::equals);
+    }
+
+    private String normalizePath(String path) {
+        // Strip ;jsessionid=... and trailing slashes
+        int semi = path.indexOf(';');
+        if (semi >= 0) {
+            path = path.substring(0, semi);
+        }
+        while (path.length() > 1 && path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
+        return path;
     }
 }

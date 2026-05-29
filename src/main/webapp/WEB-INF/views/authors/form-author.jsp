@@ -1,6 +1,6 @@
 <!-- WEB-INF/views/books/form.jsp -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <jsp:include page="/WEB-INF/layouts/header.jsp"/>
 
 <div class="container mt-4">
@@ -14,7 +14,7 @@
                     <!-- Display global errors if any -->
                     <c:if test="${not empty errorMessage}">
                         <div class="alert alert-danger" role="alert">
-                                ${errorMessage}
+                                <c:out value="${errorMessage}"/>
                         </div>
                     </c:if>
 
@@ -22,6 +22,7 @@
                         <c:if test="${action == 'edit'}">
                             <input type="hidden" name="id" value="${author.authorId}">
                         </c:if>
+                        <input type="hidden" name="_csrf" value="${csrfToken}"/>
 
                         <div class="mb-3">
                             <label for="name" class="form-label">Nombre</label>
@@ -29,11 +30,11 @@
                                    class="form-control ${not empty errors.name ? 'is-invalid' : ''}"
                                    id="name"
                                    name="name"
-                                   value="${author.name}"
+                                   value="<c:out value='${author.name}'/>"
                                    required>
                             <c:if test="${not empty errors.name}">
                                 <div class="invalid-feedback">
-                                        ${errors.name}
+                                        <c:out value="${errors.name}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -44,11 +45,11 @@
                                    class="form-control ${not empty errors.surname ? 'is-invalid' : ''}"
                                    id="surname"
                                    name="surname"
-                                   value="${author.surname}"
+                                   value="<c:out value='${author.surname}'/>"
                                    required>
                             <c:if test="${not empty errors.surname}">
                                 <div class="invalid-feedback">
-                                        ${errors.surname}
+                                        <c:out value="${errors.surname}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -59,11 +60,11 @@
                                    class="form-control ${not empty errors.fullName ? 'is-invalid' : ''}"
                                    id="fullName"
                                    name="fullName"
-                                   value="${author.fullName}"
+                                   value="<c:out value='${author.fullName}'/>"
                                    required>
                             <c:if test="${not empty errors.fullName}">
                                 <div class="invalid-feedback">
-                                        ${errors.fullName}
+                                        <c:out value="${errors.fullName}"/>
                                 </div>
                             </c:if>
                         </div>

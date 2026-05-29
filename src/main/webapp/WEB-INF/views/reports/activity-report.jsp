@@ -24,13 +24,13 @@
                     <tbody>
                     <c:forEach items="${reportData}" var="member">
                     <tr>
-                        <td>${member.rut}</td>
-                        <td>${member.fullName}</td>
-                        <td>${member.state}</td>
-                        <td>${member.registrationDate}</td>
-                        <td>${member.totalHistoricalLoans}</td>
-                        <td>${member.overdueLoans}</td>
-                        <td>${member.activeLoans}</td>
+                        <td><c:out value="${member.rut}"/></td>
+                        <td><c:out value="${member.fullName}"/></td>
+                        <td><c:out value="${member.state}"/></td>
+                        <td><c:out value="${member.registrationDate}"/></td>
+                        <td><c:out value="${member.totalHistoricalLoans}"/></td>
+                        <td><c:out value="${member.overdueLoans}"/></td>
+                        <td><c:out value="${member.activeLoans}"/></td>
                     </tr>
                     </c:forEach>
                     </tbody>

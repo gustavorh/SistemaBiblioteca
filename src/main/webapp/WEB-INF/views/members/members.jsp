@@ -29,19 +29,23 @@
                     <tbody>
                     <c:forEach items="${members}" var="m">
                         <tr>
-                            <td>${m.memberId}</td>
-                            <td>${m.rut}</td>
-                            <td>${m.user.userName}</td>
-                            <td>${m.name} ${m.paternalSurname} ${m.maternalSurname}</td>
-                            <td>${m.registrationDate}</td>
-                            <td>${m.status.name}</td>
+                            <td><c:out value="${m.memberId}"/></td>
+                            <td><c:out value="${m.rut}"/></td>
+                            <td><c:out value="${m.user.userName}"/></td>
+                            <td><c:out value="${m.name}"/> <c:out value="${m.paternalSurname}"/> <c:out value="${m.maternalSurname}"/></td>
+                            <td><c:out value="${m.registrationDate}"/></td>
+                            <td><c:out value="${m.status.name}"/></td>
                             <c:if test="${sessionScope.loggedIn}">
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a href="${pageContext.request.contextPath}/members/edit?id=${m.memberId}"
                                            class="btn btn-sm btn-warning">Edit</a>
-                                        <button type="button" class="btn btn-sm btn-danger"
-                                                onclick="confirmDelete(${m.memberId})">Delete</button>
+                                        <form method="post" action="${pageContext.request.contextPath}/members/delete" style="display:inline;"
+                                              onsubmit="return confirm('Are you sure you want to delete this record?')">
+                                          <input type="hidden" name="id" value="${m.memberId}"/>
+                                          <input type="hidden" name="_csrf" value="${csrfToken}"/>
+                                          <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
                                     </div>
                                 </td>
                             </c:if>
@@ -54,11 +58,4 @@
     </div>
 </div>
 
-<script>
-    function confirmDelete(id) {
-        if (confirm('Are you sure you want to delete this Book?')) {
-            window.location.href = '${pageContext.request.contextPath}/members/delete?id=' + id;
-        }
-    }
-</script>
 <jsp:include page="/WEB-INF/layouts/footer.jsp" />

@@ -1,6 +1,6 @@
 <!-- WEB-INF/views/books/form.jsp -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <jsp:include page="/WEB-INF/layouts/header.jsp"/>
 
 <div class="container mt-4">
@@ -14,7 +14,7 @@
                     <!-- Display global errors if any -->
                     <c:if test="${not empty errorMessage}">
                         <div class="alert alert-danger" role="alert">
-                                ${errorMessage}
+                                <c:out value="${errorMessage}"/>
                         </div>
                     </c:if>
 
@@ -22,6 +22,7 @@
                         <c:if test="${action == 'edit'}">
                             <input type="hidden" name="id" value="${book.bookId}">
                         </c:if>
+                        <input type="hidden" name="_csrf" value="${csrfToken}"/>
 
                         <div class="mb-3">
                             <label for="title" class="form-label">Title</label>
@@ -29,11 +30,11 @@
                                    class="form-control ${not empty errors.title ? 'is-invalid' : ''}"
                                    id="title"
                                    name="title"
-                                   value="${book.title}"
+                                   value="<c:out value='${book.title}'/>"
                                    required>
                             <c:if test="${not empty errors.title}">
                                 <div class="invalid-feedback">
-                                        ${errors.title}
+                                        <c:out value="${errors.title}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -44,11 +45,11 @@
                                    class="form-control ${not empty errors.isbn ? 'is-invalid' : ''}"
                                    id="isbn"
                                    name="isbn"
-                                   value="${book.isbn}"
+                                   value="<c:out value='${book.isbn}'/>"
                                    required>
                             <c:if test="${not empty errors.isbn}">
                                 <div class="invalid-feedback">
-                                        ${errors.isbn}
+                                        <c:out value="${errors.isbn}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -59,13 +60,13 @@
                                    class="form-control ${not empty errors.publicationYear ? 'is-invalid' : ''}"
                                    id="publicationYear"
                                    name="publicationYear"
-                                   value="${book.publicationYear}"
+                                   value="<c:out value='${book.publicationYear}'/>"
                                    min="1800"
                                    max="2024"
                                    required>
                             <c:if test="${not empty errors.publicationYear}">
                                 <div class="invalid-feedback">
-                                        ${errors.publicationYear}
+                                        <c:out value="${errors.publicationYear}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -80,13 +81,13 @@
                                 <c:forEach items="${authors}" var="author">
                                     <option value="${author.authorId}"
                                         ${book.author.authorId == author.authorId ? 'selected' : ''}>
-                                            ${author.fullName}
+                                            <c:out value="${author.fullName}"/>
                                     </option>
                                 </c:forEach>
                             </select>
                             <c:if test="${not empty errors.authorId}">
                                 <div class="invalid-feedback">
-                                        ${errors.authorId}
+                                        <c:out value="${errors.authorId}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -101,13 +102,13 @@
                                 <c:forEach items="${categories}" var="category">
                                     <option value="${category.categoryId}"
                                         ${book.category.categoryId == category.categoryId ? 'selected' : ''}>
-                                            ${category.name}
+                                            <c:out value="${category.name}"/>
                                     </option>
                                 </c:forEach>
                             </select>
                             <c:if test="${not empty errors.categoryId}">
                                 <div class="invalid-feedback">
-                                        ${errors.categoryId}
+                                        <c:out value="${errors.categoryId}"/>
                                 </div>
                             </c:if>
                         </div>

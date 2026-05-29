@@ -25,15 +25,19 @@
           <tbody>
           <c:forEach items="${categories}" var="c">
             <tr>
-              <td>${c.categoryId}</td>
-              <td>${c.name}</td>
+              <td><c:out value="${c.categoryId}"/></td>
+              <td><c:out value="${c.name}"/></td>
               <c:if test="${sessionScope.loggedIn}">
                 <td>
                   <div class="btn-group" role="group">
                     <a href="${pageContext.request.contextPath}/categories/edit?id=${c.categoryId}"
                        class="btn btn-sm btn-warning">Edit</a>
-                    <button type="button" class="btn btn-sm btn-danger"
-                            onclick="confirmDelete(${c.categoryId})">Delete</button>
+                    <form method="post" action="${pageContext.request.contextPath}/categories/delete" style="display:inline;"
+                          onsubmit="return confirm('Are you sure you want to delete this record?')">
+                      <input type="hidden" name="id" value="${c.categoryId}"/>
+                      <input type="hidden" name="_csrf" value="${csrfToken}"/>
+                      <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
                   </div>
                 </td>
               </c:if>
@@ -46,11 +50,4 @@
   </div>
 </div>
 
-<script>
-  function confirmDelete(id) {
-    if (confirm('Are you sure you want to delete this Book?')) {
-      window.location.href = '${pageContext.request.contextPath}/categories/delete?id=' + id;
-    }
-  }
-</script>
 <jsp:include page="/WEB-INF/layouts/footer.jsp" />

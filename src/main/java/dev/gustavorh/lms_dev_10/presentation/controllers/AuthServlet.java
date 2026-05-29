@@ -84,6 +84,7 @@ public class AuthServlet extends HttpServlet {
                 Optional<User> userOptional = authService.login(username, password);
 
                 if (userOptional.isPresent()) {
+                    req.changeSessionId();
                     HttpSession session = req.getSession();
                     session.setAttribute("loggedIn", true);
                     session.setAttribute("username", username);

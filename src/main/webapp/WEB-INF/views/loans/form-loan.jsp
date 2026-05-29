@@ -7,7 +7,7 @@
 --%>
 <!-- WEB-INF/views/books/form.jsp -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <jsp:include page="/WEB-INF/layouts/header.jsp"/>
 
 <div class="container mt-4">
@@ -21,7 +21,7 @@
           <!-- Display global errors if any -->
           <c:if test="${not empty errorMessage}">
             <div class="alert alert-danger" role="alert">
-                ${errorMessage}
+                <c:out value="${errorMessage}"/>
             </div>
           </c:if>
 
@@ -29,6 +29,7 @@
             <c:if test="${action == 'edit'}">
               <input type="hidden" name="id" value="${loan.loanId}">
             </c:if>
+            <input type="hidden" name="_csrf" value="${csrfToken}"/>
 
             <div class="mb-3">
               <label for="title" class="form-label">Titulo Libro</label>
@@ -36,11 +37,11 @@
                      class="form-control ${not empty errors.title ? 'is-invalid' : ''}"
                      id="title"
                      name="title"
-                     value="${loan.book.title}"
+                     value="<c:out value='${loan.book.title}'/>"
                      required>
               <c:if test="${not empty errors.title}">
                 <div class="invalid-feedback">
-                    ${errors.title}
+                    <c:out value="${errors.title}"/>
                 </div>
               </c:if>
             </div>
@@ -55,13 +56,13 @@
                 <c:forEach items="${members}" var="member">
                   <option value="${member.memberId}"
                     ${loan.member.memberId == member.memberId ? 'selected' : ''}>
-                      ${member.name} ${member.paternalSurname} ${member.maternalSurname}
+                      <c:out value="${member.name}"/> <c:out value="${member.paternalSurname}"/> <c:out value="${member.maternalSurname}"/>
                   </option>
                 </c:forEach>
               </select>
               <c:if test="${not empty errors.memberId}">
                 <div class="invalid-feedback">
-                    ${errors.memberId}
+                    <c:out value="${errors.memberId}"/>
                 </div>
               </c:if>
             </div>
@@ -72,11 +73,11 @@
                      class="form-control ${not empty errors.loanDate ? 'is-invalid' : ''}"
                      id="loanDate"
                      name="loanDate"
-                     value="${loan.loanDate}"
+                     value="<c:out value='${loan.loanDate}'/>"
                      required>
               <c:if test="${not empty errors.loanDate}">
                 <div class="invalid-feedback">
-                    ${errors.loanDate}
+                    <c:out value="${errors.loanDate}"/>
                 </div>
               </c:if>
             </div>
@@ -87,11 +88,11 @@
                      class="form-control ${not empty errors.dueDate ? 'is-invalid' : ''}"
                      id="dueDate"
                      name="dueDate"
-                     value="${loan.dueDate}"
+                     value="<c:out value='${loan.dueDate}'/>"
                      required>
               <c:if test="${not empty errors.dueDate}">
                 <div class="invalid-feedback">
-                    ${errors.dueDate}
+                    <c:out value="${errors.dueDate}"/>
                 </div>
               </c:if>
             </div>
@@ -102,11 +103,11 @@
                      class="form-control ${not empty errors.returnDate ? 'is-invalid' : ''}"
                      id="returnDate"
                      name="returnDate"
-                     value="${loan.returnDate}"
+                     value="<c:out value='${loan.returnDate}'/>"
                      required>
               <c:if test="${not empty errors.returnDate}">
                 <div class="invalid-feedback">
-                    ${errors.returnDate}
+                    <c:out value="${errors.returnDate}"/>
                 </div>
               </c:if>
             </div>

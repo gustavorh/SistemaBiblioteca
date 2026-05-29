@@ -12,6 +12,8 @@ import dev.gustavorh.lms_dev_10.domain.entities.RoleUsers;
 import dev.gustavorh.lms_dev_10.domain.entities.Status;
 import dev.gustavorh.lms_dev_10.application.factories.interfaces.IRepositoryFactory;
 import dev.gustavorh.lms_dev_10.application.factories.interfaces.IServiceFactory;
+import dev.gustavorh.lms_dev_10.application.security.BCryptPasswordEncoder;
+import dev.gustavorh.lms_dev_10.application.security.PasswordEncoder;
 import dev.gustavorh.lms_dev_10.application.services.implementations.AuthService;
 import dev.gustavorh.lms_dev_10.application.services.implementations.AuthorService;
 import dev.gustavorh.lms_dev_10.application.services.implementations.BookService;
@@ -30,17 +32,19 @@ import dev.gustavorh.lms_dev_10.application.services.interfaces.IUserService;
 
 public class DefaultServiceFactory implements IServiceFactory {
     private final IRepositoryFactory repositoryFactory;
+    private final PasswordEncoder passwordEncoder;
 
     public DefaultServiceFactory(IRepositoryFactory repositoryFactory) {
         this.repositoryFactory = repositoryFactory;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
 
     @Override
-    public IAuthService createAuthService() { return new AuthService(createUserService()); }
+    public IAuthService createAuthService() { return new AuthService(createUserService(), passwordEncoder); }
 
     @Override
-    public IUserService createUserService() { return new UserService(repositoryFactory.createUserRepository()); }
+    public IUserService createUserService() { return new UserService(repositoryFactory.createUserRepository(), passwordEncoder); }
 
     @Override
     public IService<Book> createBookService() { return new BookService(repositoryFactory.createBookRepository()); }

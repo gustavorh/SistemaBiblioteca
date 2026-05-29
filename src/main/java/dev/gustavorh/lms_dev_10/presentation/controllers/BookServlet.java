@@ -4,7 +4,6 @@ import dev.gustavorh.lms_dev_10.infrastructure.config.DbContext;
 import dev.gustavorh.lms_dev_10.domain.entities.Author;
 import dev.gustavorh.lms_dev_10.domain.entities.Book;
 import dev.gustavorh.lms_dev_10.domain.entities.Category;
-import dev.gustavorh.lms_dev_10.domain.exceptions.ServiceException;
 import dev.gustavorh.lms_dev_10.application.factories.implementations.DefaultServiceFactory;
 import dev.gustavorh.lms_dev_10.application.factories.implementations.JdbcRepositoryFactory;
 import dev.gustavorh.lms_dev_10.application.factories.interfaces.IRepositoryFactory;
@@ -15,7 +14,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.BadRequestException;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -48,39 +46,31 @@ public class BookServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getPathInfo();
+        if (path == null) path = "/";
 
-        try {
-            switch (path) {
-                case "/", "/all":
-                    request.setAttribute("books", bookService.findAll());
-                    request.getRequestDispatcher("/WEB-INF/views/books/books.jsp").forward(request, response);
-                    break;
-                case "/create":
-                    request.setAttribute("book", new Book()); // Empty book for the form
-                    request.setAttribute("action", "create");
-                    request.setAttribute("authors", authorService.findAll());
-                    request.setAttribute("categories", categoryService.findAll());
-                    request.getRequestDispatcher("/WEB-INF/views/books/form-book.jsp").forward(request, response);
-                    break;
-                case "/edit":
-                    if (request.getParameter("id") == null || request.getParameter("id").isBlank()) {
-                        throw new BadRequestException("El ID no debe ser nulo ni un string vacío.");
-                    }
-                    request.setAttribute("book", bookService.findById(Long.valueOf(request.getParameter("id"))).get());
-                    request.setAttribute("action", "edit");
-                    request.setAttribute("authors", authorService.findAll());
-                    request.setAttribute("categories", categoryService.findAll());
-                    request.getRequestDispatcher("/WEB-INF/views/books/form-book.jsp").forward(request, response);
-                    break;
-                case "/delete":
-                    if (request.getParameter("id") == null || request.getParameter("id").isBlank()) {
-                        throw new BadRequestException("El ID no debe ser nulo ni un string vacío.");
-                    }
-                    bookService.delete(Long.valueOf(request.getParameter("id")));
-                    response.sendRedirect(request.getContextPath() + "/books/all");
-            }
-        } catch (ServiceException e) {
-            throw new ServletException("Error processing book form", e);
+        switch (path) {
+            case "/", "/all":
+                request.setAttribute("books", bookService.findAll());
+                request.getRequestDispatcher("/WEB-INF/views/books/books.jsp").forward(request, response);
+                break;
+            case "/create":
+                request.setAttribute("book", new Book()); // Empty book for the form
+                request.setAttribute("action", "create");
+                request.setAttribute("authors", authorService.findAll());
+                request.setAttribute("categories", categoryService.findAll());
+                request.getRequestDispatcher("/WEB-INF/views/books/form-book.jsp").forward(request, response);
+                break;
+            case "/edit":
+                if (request.getParameter("id") == null || request.getParameter("id").isBlank()) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
+                request.setAttribute("book", bookService.findById(Long.valueOf(request.getParameter("id"))).get());
+                request.setAttribute("action", "edit");
+                request.setAttribute("authors", authorService.findAll());
+                request.setAttribute("categories", categoryService.findAll());
+                request.getRequestDispatcher("/WEB-INF/views/books/form-book.jsp").forward(request, response);
+                break;
         }
     }
 
@@ -88,6 +78,7 @@ public class BookServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getPathInfo();
+        if (path == null) { response.sendError(HttpServletResponse.SC_NOT_FOUND); return; }
         try {
             if (path.equals("/create")) {
                 // Populate book object from form parameters
@@ -111,7 +102,8 @@ public class BookServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/books/all");
             } else if (path.equals("/edit")) {
                 if (request.getParameter("id") == null || request.getParameter("id").isBlank()) {
-                    throw new BadRequestException("El ID no debe ser nulo ni un string vacío.");
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
                 }
                 Book book = buildBook(request, response);
                 book.setBookId(Long.valueOf(request.getParameter("id")));
@@ -131,11 +123,17 @@ public class BookServlet extends HttpServlet {
                 }
                 bookService.update(book);
                 response.sendRedirect(request.getContextPath() + "/books/all");
+            } else if (path.equals("/delete")) {
+                String idParam = request.getParameter("id");
+                if (idParam == null || idParam.isBlank()) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
+                bookService.delete(Long.valueOf(idParam));
+                response.sendRedirect(request.getContextPath() + "/books/all");
             }
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        } catch (ServiceException e) {
-            throw new ServletException("Error saving book", e);
         }
     }
 

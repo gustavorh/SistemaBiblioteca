@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./mvnw *)",
+      "Bash(mvn *)",
+      "Bash(docker build *)",
+      "Bash(docker-compose *)",
+      "Bash(docker compose *)",
+      "Bash(git status)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git branch *)",
+      "Bash(find src *)",
+      "Bash(grep -r * src/)",
+      "Bash(grep -r * docs/)",
+      "Bash(grep -rn * src/)",
+      "Bash(ls *)",
+      "Bash(cat pom.xml)",
+      "Bash(cat Dockerfile)",
+      "Bash(cat docker-compose.yml)"
+    ],
+    "deny": [
+      "Bash(git push *)",
+      "Bash(git reset --hard *)",
+      "Bash(rm -rf *)",
+      "Bash(docker rm *)",
+      "Bash(docker rmi *)"
+    ]
+  }
+}

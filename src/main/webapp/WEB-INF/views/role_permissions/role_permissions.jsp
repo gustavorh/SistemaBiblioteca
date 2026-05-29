@@ -25,15 +25,19 @@
                     <tbody>
                     <c:forEach items="${rolePermissions}" var="rp">
                         <tr>
-                            <td>${rp.role.name}</td>
-                            <td>${rp.permission.name}</td>
+                            <td><c:out value="${rp.role.name}"/></td>
+                            <td><c:out value="${rp.permission.name}"/></td>
                             <c:if test="${sessionScope.loggedIn}">
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a href="${pageContext.request.contextPath}/role_users/edit?id=${rp.role.roleId}"
                                            class="btn btn-sm btn-warning">Edit</a>
-                                        <button type="button" class="btn btn-sm btn-danger"
-                                                onclick="confirmDelete(${rp.role.roleId})">Delete</button>
+                                        <form method="post" action="${pageContext.request.contextPath}/role_permissions/delete" style="display:inline;"
+                                              onsubmit="return confirm('Are you sure you want to delete this record?')">
+                                          <input type="hidden" name="id" value="${rp.role.roleId}"/>
+                                          <input type="hidden" name="_csrf" value="${csrfToken}"/>
+                                          <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
                                     </div>
                                 </td>
                             </c:if>
@@ -46,11 +50,4 @@
     </div>
 </div>
 
-<script>
-    function confirmDelete(id) {
-        if (confirm('Are you sure you want to delete this Book?')) {
-            window.location.href = '${pageContext.request.contextPath}/role_permissions/delete?id=' + id;
-        }
-    }
-</script>
 <jsp:include page="/WEB-INF/layouts/footer.jsp" />

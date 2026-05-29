@@ -1,6 +1,6 @@
 <!-- WEB-INF/views/books/form.jsp -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <jsp:include page="/WEB-INF/layouts/header.jsp"/>
 
 <div class="container mt-4">
@@ -14,7 +14,7 @@
                     <!-- Display global errors if any -->
                     <c:if test="${not empty errorMessage}">
                         <div class="alert alert-danger" role="alert">
-                                ${errorMessage}
+                                <c:out value="${errorMessage}"/>
                         </div>
                     </c:if>
 
@@ -22,6 +22,7 @@
                         <c:if test="${action == 'edit'}">
                             <input type="hidden" name="id" value="${user.userId}">
                         </c:if>
+                        <input type="hidden" name="_csrf" value="${csrfToken}"/>
 
                         <div class="mb-3">
                             <label for="userName" class="form-label">Usuario</label>
@@ -29,11 +30,11 @@
                                    class="form-control ${not empty errors.userName ? 'is-invalid' : ''}"
                                    id="userName"
                                    name="userName"
-                                   value="${user.userName}"
+                                   value="<c:out value='${user.userName}'/>"
                                    required>
                             <c:if test="${not empty errors.userName}">
                                 <div class="invalid-feedback">
-                                        ${errors.userName}
+                                        <c:out value="${errors.userName}"/>
                                 </div>
                             </c:if>
                         </div>
@@ -44,11 +45,11 @@
                                    class="form-control ${not empty errors.password ? 'is-invalid' : ''}"
                                    id="password"
                                    name="password"
-                                   value="${user.password}"
+                                   value="<c:out value='${user.password}'/>"
                                    required>
                             <c:if test="${not empty errors.password}">
                             <div class="invalid-feedback">
-                                    ${errors.password}
+                                    <c:out value="${errors.password}"/>
                             </div>
                             </c:if>
 
